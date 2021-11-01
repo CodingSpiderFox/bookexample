@@ -125,11 +125,11 @@ export const Book = (props: RouteComponentProps<{ url: string }>) => {
                   <th className="hand" onClick={sort('id')}>
                     <Translate contentKey="constraintissueApp.book.id">ID</Translate> <FontAwesomeIcon icon="sort" />
                   </th>
-                  <th className="hand" onClick={sort('name')}>
-                    <Translate contentKey="constraintissueApp.book.name">Name</Translate> <FontAwesomeIcon icon="sort" />
-                  </th>
                   <th className="hand" onClick={sort('price')}>
                     <Translate contentKey="constraintissueApp.book.price">Price</Translate> <FontAwesomeIcon icon="sort" />
+                  </th>
+                  <th className="hand" onClick={sort('title')}>
+                    <Translate contentKey="constraintissueApp.book.title">Title</Translate> <FontAwesomeIcon icon="sort" />
                   </th>
                   <th />
                 </tr>
@@ -142,8 +142,8 @@ export const Book = (props: RouteComponentProps<{ url: string }>) => {
                         {book.id}
                       </Button>
                     </td>
-                    <td>{book.name}</td>
                     <td>{book.price}</td>
+                    <td>{book.title}</td>
                     <td className="text-right">
                       <div className="btn-group flex-btn-group-container">
                         <Button tag={Link} to={`${match.url}/${book.id}`} color="info" size="sm" data-cy="entityDetailsButton">

@@ -30,17 +30,17 @@ export const BookDetail = (props: RouteComponentProps<{ id: string }>) => {
           </dt>
           <dd>{bookEntity.id}</dd>
           <dt>
-            <span id="name">
-              <Translate contentKey="constraintissueApp.book.name">Name</Translate>
-            </span>
-          </dt>
-          <dd>{bookEntity.name}</dd>
-          <dt>
             <span id="price">
               <Translate contentKey="constraintissueApp.book.price">Price</Translate>
             </span>
           </dt>
           <dd>{bookEntity.price}</dd>
+          <dt>
+            <span id="title">
+              <Translate contentKey="constraintissueApp.book.title">Title</Translate>
+            </span>
+          </dt>
+          <dd>{bookEntity.title}</dd>
           <dt>
             <Translate contentKey="constraintissueApp.book.author">Author</Translate>
           </dt>

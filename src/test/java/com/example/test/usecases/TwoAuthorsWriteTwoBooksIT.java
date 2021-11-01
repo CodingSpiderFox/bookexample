@@ -86,7 +86,7 @@ public class TwoAuthorsWriteTwoBooksIT {
 
     private Book newBook(String title) {
         Book book = new Book();
-        book.setName(title);
+        book.setTitle(title);
         book.setPrice(1.99D);
         if (!TestUtil.findAll(em, Author.class).isEmpty()) {
             book.addAuthor(TestUtil.findAll(em, Author.class).get(0));

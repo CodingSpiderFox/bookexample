@@ -26,9 +26,9 @@ public class BookCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
-    private StringFilter name;
-
     private DoubleFilter price;
+
+    private StringFilter title;
 
     private LongFilter authorId;
 
@@ -38,8 +38,8 @@ public class BookCriteria implements Serializable, Criteria {
 
     public BookCriteria(BookCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.name = other.name == null ? null : other.name.copy();
         this.price = other.price == null ? null : other.price.copy();
+        this.title = other.title == null ? null : other.title.copy();
         this.authorId = other.authorId == null ? null : other.authorId.copy();
         this.distinct = other.distinct;
     }
@@ -64,21 +64,6 @@ public class BookCriteria implements Serializable, Criteria {
         this.id = id;
     }
 
-    public StringFilter getName() {
-        return name;
-    }
-
-    public StringFilter name() {
-        if (name == null) {
-            name = new StringFilter();
-        }
-        return name;
-    }
-
-    public void setName(StringFilter name) {
-        this.name = name;
-    }
-
     public DoubleFilter getPrice() {
         return price;
     }
@@ -92,6 +77,21 @@ public class BookCriteria implements Serializable, Criteria {
 
     public void setPrice(DoubleFilter price) {
         this.price = price;
+    }
+
+    public StringFilter getTitle() {
+        return title;
+    }
+
+    public StringFilter title() {
+        if (title == null) {
+            title = new StringFilter();
+        }
+        return title;
+    }
+
+    public void setTitle(StringFilter title) {
+        this.title = title;
     }
 
     public LongFilter getAuthorId() {
@@ -128,8 +128,8 @@ public class BookCriteria implements Serializable, Criteria {
         final BookCriteria that = (BookCriteria) o;
         return (
             Objects.equals(id, that.id) &&
-            Objects.equals(name, that.name) &&
             Objects.equals(price, that.price) &&
+            Objects.equals(title, that.title) &&
             Objects.equals(authorId, that.authorId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -137,7 +137,7 @@ public class BookCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, price, authorId, distinct);
+        return Objects.hash(id, price, title, authorId, distinct);
     }
 
     // prettier-ignore
@@ -145,8 +145,8 @@ public class BookCriteria implements Serializable, Criteria {
     public String toString() {
         return "BookCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
-            (name != null ? "name=" + name + ", " : "") +
             (price != null ? "price=" + price + ", " : "") +
+            (title != null ? "title=" + title + ", " : "") +
             (authorId != null ? "authorId=" + authorId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

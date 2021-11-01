@@ -18,8 +18,8 @@
         "title": "Book"
       },
       "id": "ID",
-      "name": "Name",
       "price": "Price",
+      "title": "Title",
       "author": "Author"
     }
   }

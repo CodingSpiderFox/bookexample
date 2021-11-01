@@ -16,7 +16,7 @@ describe('Book e2e test', () => {
   const bookPageUrlPattern = new RegExp('/book(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const bookSample = { name: 'infrastructures', price: 39916 };
+  const bookSample = { price: 32204, title: 'Soft online' };
 
   let book: any;
   let author: any;
@@ -190,9 +190,9 @@ describe('Book e2e test', () => {
     });
 
     it('should create an instance of Book', () => {
-      cy.get(`[data-cy="name"]`).type('Oregon zero').should('have.value', 'Oregon zero');
+      cy.get(`[data-cy="price"]`).type('51838').should('have.value', '51838');
 
-      cy.get(`[data-cy="price"]`).type('47549').should('have.value', '47549');
+      cy.get(`[data-cy="title"]`).type('monitor Supervisor').should('have.value', 'monitor Supervisor');
 
       cy.get(`[data-cy="author"]`).select([0]);
 

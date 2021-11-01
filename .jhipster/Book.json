@@ -1,13 +1,13 @@
 {
   "fields": [
     {
-      "fieldName": "name",
-      "fieldType": "String",
+      "fieldName": "price",
+      "fieldType": "Double",
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "price",
-      "fieldType": "Double",
+      "fieldName": "title",
+      "fieldType": "String",
       "fieldValidateRules": ["required"]
     }
   ],

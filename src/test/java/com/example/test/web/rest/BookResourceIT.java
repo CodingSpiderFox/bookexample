@@ -42,12 +42,12 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class BookResourceIT {
 
-    private static final String DEFAULT_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_NAME = "BBBBBBBBBB";
-
     private static final Double DEFAULT_PRICE = 1D;
     private static final Double UPDATED_PRICE = 2D;
     private static final Double SMALLER_PRICE = 1D - 1D;
+
+    private static final String DEFAULT_TITLE = "AAAAAAAAAA";
+    private static final String UPDATED_TITLE = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/books";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -82,7 +82,7 @@ class BookResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Book createEntity(EntityManager em) {
-        Book book = new Book().name(DEFAULT_NAME).price(DEFAULT_PRICE);
+        Book book = new Book().price(DEFAULT_PRICE).title(DEFAULT_TITLE);
         // Add required entity
         Author author;
         if (TestUtil.findAll(em, Author.class).isEmpty()) {
@@ -103,7 +103,7 @@ class BookResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Book createUpdatedEntity(EntityManager em) {
-        Book book = new Book().name(UPDATED_NAME).price(UPDATED_PRICE);
+        Book book = new Book().price(UPDATED_PRICE).title(UPDATED_TITLE);
         // Add required entity
         Author author;
         if (TestUtil.findAll(em, Author.class).isEmpty()) {
@@ -136,8 +136,8 @@ class BookResourceIT {
         List<Book> bookList = bookRepository.findAll();
         assertThat(bookList).hasSize(databaseSizeBeforeCreate + 1);
         Book testBook = bookList.get(bookList.size() - 1);
-        assertThat(testBook.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testBook.getPrice()).isEqualTo(DEFAULT_PRICE);
+        assertThat(testBook.getTitle()).isEqualTo(DEFAULT_TITLE);
     }
 
     @Test
@@ -161,10 +161,10 @@ class BookResourceIT {
 
     @Test
     @Transactional
-    void checkNameIsRequired() throws Exception {
+    void checkPriceIsRequired() throws Exception {
         int databaseSizeBeforeTest = bookRepository.findAll().size();
         // set the field null
-        book.setName(null);
+        book.setPrice(null);
 
         // Create the Book, which fails.
         BookDTO bookDTO = bookMapper.toDto(book);
@@ -179,10 +179,10 @@ class BookResourceIT {
 
     @Test
     @Transactional
-    void checkPriceIsRequired() throws Exception {
+    void checkTitleIsRequired() throws Exception {
         int databaseSizeBeforeTest = bookRepository.findAll().size();
         // set the field null
-        book.setPrice(null);
+        book.setTitle(null);
 
         // Create the Book, which fails.
         BookDTO bookDTO = bookMapper.toDto(book);
@@ -207,8 +207,8 @@ class BookResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(book.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.doubleValue())));
+            .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.doubleValue())))
+            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -241,8 +241,8 @@ class BookResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(book.getId().intValue()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
-            .andExpect(jsonPath("$.price").value(DEFAULT_PRICE.doubleValue()));
+            .andExpect(jsonPath("$.price").value(DEFAULT_PRICE.doubleValue()))
+            .andExpect(jsonPath("$.title").value(DEFAULT_TITLE));
     }
 
     @Test
@@ -261,84 +261,6 @@ class BookResourceIT {
 
         defaultBookShouldBeFound("id.lessThanOrEqual=" + id);
         defaultBookShouldNotBeFound("id.lessThan=" + id);
-    }
-
-    @Test
-    @Transactional
-    void getAllBooksByNameIsEqualToSomething() throws Exception {
-        // Initialize the database
-        bookRepository.saveAndFlush(book);
-
-        // Get all the bookList where name equals to DEFAULT_NAME
-        defaultBookShouldBeFound("name.equals=" + DEFAULT_NAME);
-
-        // Get all the bookList where name equals to UPDATED_NAME
-        defaultBookShouldNotBeFound("name.equals=" + UPDATED_NAME);
-    }
-
-    @Test
-    @Transactional
-    void getAllBooksByNameIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        bookRepository.saveAndFlush(book);
-
-        // Get all the bookList where name not equals to DEFAULT_NAME
-        defaultBookShouldNotBeFound("name.notEquals=" + DEFAULT_NAME);
-
-        // Get all the bookList where name not equals to UPDATED_NAME
-        defaultBookShouldBeFound("name.notEquals=" + UPDATED_NAME);
-    }
-
-    @Test
-    @Transactional
-    void getAllBooksByNameIsInShouldWork() throws Exception {
-        // Initialize the database
-        bookRepository.saveAndFlush(book);
-
-        // Get all the bookList where name in DEFAULT_NAME or UPDATED_NAME
-        defaultBookShouldBeFound("name.in=" + DEFAULT_NAME + "," + UPDATED_NAME);
-
-        // Get all the bookList where name equals to UPDATED_NAME
-        defaultBookShouldNotBeFound("name.in=" + UPDATED_NAME);
-    }
-
-    @Test
-    @Transactional
-    void getAllBooksByNameIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        bookRepository.saveAndFlush(book);
-
-        // Get all the bookList where name is not null
-        defaultBookShouldBeFound("name.specified=true");
-
-        // Get all the bookList where name is null
-        defaultBookShouldNotBeFound("name.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllBooksByNameContainsSomething() throws Exception {
-        // Initialize the database
-        bookRepository.saveAndFlush(book);
-
-        // Get all the bookList where name contains DEFAULT_NAME
-        defaultBookShouldBeFound("name.contains=" + DEFAULT_NAME);
-
-        // Get all the bookList where name contains UPDATED_NAME
-        defaultBookShouldNotBeFound("name.contains=" + UPDATED_NAME);
-    }
-
-    @Test
-    @Transactional
-    void getAllBooksByNameNotContainsSomething() throws Exception {
-        // Initialize the database
-        bookRepository.saveAndFlush(book);
-
-        // Get all the bookList where name does not contain DEFAULT_NAME
-        defaultBookShouldNotBeFound("name.doesNotContain=" + DEFAULT_NAME);
-
-        // Get all the bookList where name does not contain UPDATED_NAME
-        defaultBookShouldBeFound("name.doesNotContain=" + UPDATED_NAME);
     }
 
     @Test
@@ -447,6 +369,84 @@ class BookResourceIT {
 
     @Test
     @Transactional
+    void getAllBooksByTitleIsEqualToSomething() throws Exception {
+        // Initialize the database
+        bookRepository.saveAndFlush(book);
+
+        // Get all the bookList where title equals to DEFAULT_TITLE
+        defaultBookShouldBeFound("title.equals=" + DEFAULT_TITLE);
+
+        // Get all the bookList where title equals to UPDATED_TITLE
+        defaultBookShouldNotBeFound("title.equals=" + UPDATED_TITLE);
+    }
+
+    @Test
+    @Transactional
+    void getAllBooksByTitleIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        bookRepository.saveAndFlush(book);
+
+        // Get all the bookList where title not equals to DEFAULT_TITLE
+        defaultBookShouldNotBeFound("title.notEquals=" + DEFAULT_TITLE);
+
+        // Get all the bookList where title not equals to UPDATED_TITLE
+        defaultBookShouldBeFound("title.notEquals=" + UPDATED_TITLE);
+    }
+
+    @Test
+    @Transactional
+    void getAllBooksByTitleIsInShouldWork() throws Exception {
+        // Initialize the database
+        bookRepository.saveAndFlush(book);
+
+        // Get all the bookList where title in DEFAULT_TITLE or UPDATED_TITLE
+        defaultBookShouldBeFound("title.in=" + DEFAULT_TITLE + "," + UPDATED_TITLE);
+
+        // Get all the bookList where title equals to UPDATED_TITLE
+        defaultBookShouldNotBeFound("title.in=" + UPDATED_TITLE);
+    }
+
+    @Test
+    @Transactional
+    void getAllBooksByTitleIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        bookRepository.saveAndFlush(book);
+
+        // Get all the bookList where title is not null
+        defaultBookShouldBeFound("title.specified=true");
+
+        // Get all the bookList where title is null
+        defaultBookShouldNotBeFound("title.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllBooksByTitleContainsSomething() throws Exception {
+        // Initialize the database
+        bookRepository.saveAndFlush(book);
+
+        // Get all the bookList where title contains DEFAULT_TITLE
+        defaultBookShouldBeFound("title.contains=" + DEFAULT_TITLE);
+
+        // Get all the bookList where title contains UPDATED_TITLE
+        defaultBookShouldNotBeFound("title.contains=" + UPDATED_TITLE);
+    }
+
+    @Test
+    @Transactional
+    void getAllBooksByTitleNotContainsSomething() throws Exception {
+        // Initialize the database
+        bookRepository.saveAndFlush(book);
+
+        // Get all the bookList where title does not contain DEFAULT_TITLE
+        defaultBookShouldNotBeFound("title.doesNotContain=" + DEFAULT_TITLE);
+
+        // Get all the bookList where title does not contain UPDATED_TITLE
+        defaultBookShouldBeFound("title.doesNotContain=" + UPDATED_TITLE);
+    }
+
+    @Test
+    @Transactional
     void getAllBooksByAuthorIsEqualToSomething() throws Exception {
         // Initialize the database
         bookRepository.saveAndFlush(book);
@@ -480,8 +480,8 @@ class BookResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(book.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.doubleValue())));
+            .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.doubleValue())))
+            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)));
 
         // Check, that the count call also returns 1
         restBookMockMvc
@@ -529,7 +529,7 @@ class BookResourceIT {
         Book updatedBook = bookRepository.findById(book.getId()).get();
         // Disconnect from session so that the updates on updatedBook are not directly saved in db
         em.detach(updatedBook);
-        updatedBook.name(UPDATED_NAME).price(UPDATED_PRICE);
+        updatedBook.price(UPDATED_PRICE).title(UPDATED_TITLE);
         BookDTO bookDTO = bookMapper.toDto(updatedBook);
 
         restBookMockMvc
@@ -544,8 +544,8 @@ class BookResourceIT {
         List<Book> bookList = bookRepository.findAll();
         assertThat(bookList).hasSize(databaseSizeBeforeUpdate);
         Book testBook = bookList.get(bookList.size() - 1);
-        assertThat(testBook.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testBook.getPrice()).isEqualTo(UPDATED_PRICE);
+        assertThat(testBook.getTitle()).isEqualTo(UPDATED_TITLE);
     }
 
     @Test
@@ -637,8 +637,8 @@ class BookResourceIT {
         List<Book> bookList = bookRepository.findAll();
         assertThat(bookList).hasSize(databaseSizeBeforeUpdate);
         Book testBook = bookList.get(bookList.size() - 1);
-        assertThat(testBook.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testBook.getPrice()).isEqualTo(DEFAULT_PRICE);
+        assertThat(testBook.getTitle()).isEqualTo(DEFAULT_TITLE);
     }
 
     @Test
@@ -653,7 +653,7 @@ class BookResourceIT {
         Book partialUpdatedBook = new Book();
         partialUpdatedBook.setId(book.getId());
 
-        partialUpdatedBook.name(UPDATED_NAME).price(UPDATED_PRICE);
+        partialUpdatedBook.price(UPDATED_PRICE).title(UPDATED_TITLE);
 
         restBookMockMvc
             .perform(
@@ -667,8 +667,8 @@ class BookResourceIT {
         List<Book> bookList = bookRepository.findAll();
         assertThat(bookList).hasSize(databaseSizeBeforeUpdate);
         Book testBook = bookList.get(bookList.size() - 1);
-        assertThat(testBook.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testBook.getPrice()).isEqualTo(UPDATED_PRICE);
+        assertThat(testBook.getTitle()).isEqualTo(UPDATED_TITLE);
     }
 
     @Test

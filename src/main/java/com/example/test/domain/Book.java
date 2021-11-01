@@ -25,12 +25,12 @@ public class Book implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @NotNull
     @Column(name = "price", nullable = false)
     private Double price;
+
+    @NotNull
+    @Column(name = "title", nullable = false)
+    private String title;
 
     @ManyToMany
     @NotNull
@@ -53,19 +53,6 @@ public class Book implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
-    public Book name(String name) {
-        this.setName(name);
-        return this;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Double getPrice() {
         return this.price;
     }
@@ -77,6 +64,19 @@ public class Book implements Serializable {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public String getTitle() {
+        return this.title;
+    }
+
+    public Book title(String title) {
+        this.setTitle(title);
+        return this;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Set<Author> getAuthors() {
@@ -126,8 +126,8 @@ public class Book implements Serializable {
     public String toString() {
         return "Book{" +
             "id=" + getId() +
-            ", name='" + getName() + "'" +
             ", price=" + getPrice() +
+            ", title='" + getTitle() + "'" +
             "}";
     }
 }
