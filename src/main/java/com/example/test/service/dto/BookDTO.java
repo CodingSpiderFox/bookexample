@@ -1,7 +1,9 @@
 package com.example.test.service.dto;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import javax.validation.constraints.*;
 
 /**
@@ -16,6 +18,8 @@ public class BookDTO implements Serializable {
 
     @NotNull
     private Double price;
+
+    private Set<AuthorDTO> writtenBies = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -39,6 +43,14 @@ public class BookDTO implements Serializable {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Set<AuthorDTO> getWrittenBies() {
+        return writtenBies;
+    }
+
+    public void setWrittenBies(Set<AuthorDTO> writtenBies) {
+        this.writtenBies = writtenBies;
     }
 
     @Override
@@ -69,6 +81,7 @@ public class BookDTO implements Serializable {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", price=" + getPrice() +
+            ", writtenBies=" + getWrittenBies() +
             "}";
     }
 }

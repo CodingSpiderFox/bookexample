@@ -41,6 +41,19 @@ export const BookDetail = (props: RouteComponentProps<{ id: string }>) => {
             </span>
           </dt>
           <dd>{bookEntity.price}</dd>
+          <dt>
+            <Translate contentKey="constraintissueApp.book.writtenBy">Written By</Translate>
+          </dt>
+          <dd>
+            {bookEntity.writtenBies
+              ? bookEntity.writtenBies.map((val, i) => (
+                  <span key={val.id}>
+                    <a>{val.id}</a>
+                    {bookEntity.writtenBies && i === bookEntity.writtenBies.length - 1 ? '' : ', '}
+                  </span>
+                ))
+              : null}
+          </dd>
         </dl>
         <Button tag={Link} to="/book" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}

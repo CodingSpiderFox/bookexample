@@ -2,23 +2,32 @@ package com.example.test.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.example.test.IntegrationTest;
+import com.example.test.domain.Author;
 import com.example.test.domain.Book;
 import com.example.test.repository.BookRepository;
+import com.example.test.service.BookService;
 import com.example.test.service.criteria.BookCriteria;
 import com.example.test.service.dto.BookDTO;
 import com.example.test.service.mapper.BookMapper;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -28,6 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link BookResource} REST controller.
  */
 @IntegrationTest
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class BookResourceIT {
@@ -48,8 +58,14 @@ class BookResourceIT {
     @Autowired
     private BookRepository bookRepository;
 
+    @Mock
+    private BookRepository bookRepositoryMock;
+
     @Autowired
     private BookMapper bookMapper;
+
+    @Mock
+    private BookService bookServiceMock;
 
     @Autowired
     private EntityManager em;
@@ -67,6 +83,16 @@ class BookResourceIT {
      */
     public static Book createEntity(EntityManager em) {
         Book book = new Book().name(DEFAULT_NAME).price(DEFAULT_PRICE);
+        // Add required entity
+        Author author;
+        if (TestUtil.findAll(em, Author.class).isEmpty()) {
+            author = AuthorResourceIT.createEntity(em);
+            em.persist(author);
+            em.flush();
+        } else {
+            author = TestUtil.findAll(em, Author.class).get(0);
+        }
+        book.getWrittenBies().add(author);
         return book;
     }
 
@@ -78,6 +104,16 @@ class BookResourceIT {
      */
     public static Book createUpdatedEntity(EntityManager em) {
         Book book = new Book().name(UPDATED_NAME).price(UPDATED_PRICE);
+        // Add required entity
+        Author author;
+        if (TestUtil.findAll(em, Author.class).isEmpty()) {
+            author = AuthorResourceIT.createUpdatedEntity(em);
+            em.persist(author);
+            em.flush();
+        } else {
+            author = TestUtil.findAll(em, Author.class).get(0);
+        }
+        book.getWrittenBies().add(author);
         return book;
     }
 
@@ -173,6 +209,24 @@ class BookResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(book.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.doubleValue())));
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllBooksWithEagerRelationshipsIsEnabled() throws Exception {
+        when(bookServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restBookMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(bookServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllBooksWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(bookServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restBookMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(bookServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -389,6 +443,32 @@ class BookResourceIT {
 
         // Get all the bookList where price is greater than SMALLER_PRICE
         defaultBookShouldBeFound("price.greaterThan=" + SMALLER_PRICE);
+    }
+
+    @Test
+    @Transactional
+    void getAllBooksByWrittenByIsEqualToSomething() throws Exception {
+        // Initialize the database
+        bookRepository.saveAndFlush(book);
+        Author writtenBy;
+        if (TestUtil.findAll(em, Author.class).isEmpty()) {
+            writtenBy = AuthorResourceIT.createEntity(em);
+            em.persist(writtenBy);
+            em.flush();
+        } else {
+            writtenBy = TestUtil.findAll(em, Author.class).get(0);
+        }
+        em.persist(writtenBy);
+        em.flush();
+        book.addWrittenBy(writtenBy);
+        bookRepository.saveAndFlush(book);
+        Long writtenById = writtenBy.getId();
+
+        // Get all the bookList where writtenBy equals to writtenById
+        defaultBookShouldBeFound("writtenById.equals=" + writtenById);
+
+        // Get all the bookList where writtenBy equals to (writtenById + 1)
+        defaultBookShouldNotBeFound("writtenById.equals=" + (writtenById + 1));
     }
 
     /**
