@@ -38,9 +38,51 @@ public class AutobiographyCommandHandlerImpl implements AutobiographyCommandHand
         Instant birthTimestampUtc = timestampStringToUtcInstant(letAuthorBeBornAndPublishAutobiographyDto.getBirthTimestampUtc());
         Instant writeStartTimestampUtc = timestampStringToUtcInstant(letAuthorBeBornAndPublishAutobiographyDto.getWriteStartTimestampUtc());
         Instant publishTimestampUtc = timestampStringToUtcInstant(letAuthorBeBornAndPublishAutobiographyDto.getPublishTimestampUtc());
-
         long secondsBetweenBirthAndWriteStart = secondsBetween(birthTimestampUtc, writeStartTimestampUtc);
+        validateTimestamps(birthTimestampUtc, writeStartTimestampUtc, publishTimestampUtc, secondsBetweenBirthAndWriteStart);
 
+        Author author = createAuthorFor(letAuthorBeBornAndPublishAutobiographyDto, birthTimestampUtc);
+        Book book = createBookFor(letAuthorBeBornAndPublishAutobiographyDto, writeStartTimestampUtc, publishTimestampUtc, author);
+
+        return buildAutobiographyResultDTO(author, book);
+    }
+
+    private Book createBookFor(
+        LetAuthorBeBornAndPublishAutobiographyDto letAuthorBeBornAndPublishAutobiographyDto,
+        Instant writeStartTimestampUtc,
+        Instant publishTimestampUtc,
+        Author author
+    ) {
+        Book book = bookRepository.save(
+            new Book()
+                .title(letAuthorBeBornAndPublishAutobiographyDto.getBookTitle())
+                .price(letAuthorBeBornAndPublishAutobiographyDto.getBookPrice())
+                .authors(Collections.singleton(author))
+                .writeStartTimestamp(writeStartTimestampUtc)
+                .publishTimestamp(publishTimestampUtc)
+        );
+        return book;
+    }
+
+    private Author createAuthorFor(
+        LetAuthorBeBornAndPublishAutobiographyDto letAuthorBeBornAndPublishAutobiographyDto,
+        Instant birthTimestampUtc
+    ) {
+        Author author = authorRepository.save(
+            new Author()
+                .firstName(letAuthorBeBornAndPublishAutobiographyDto.getFirstName())
+                .lastName(letAuthorBeBornAndPublishAutobiographyDto.getLastName())
+                .birthTimestamp(birthTimestampUtc)
+        );
+        return author;
+    }
+
+    private void validateTimestamps(
+        Instant birthTimestampUtc,
+        Instant writeStartTimestampUtc,
+        Instant publishTimestampUtc,
+        long secondsBetweenBirthAndWriteStart
+    ) {
         if (secondsBetweenBirthAndWriteStart < minSecondsBetweenBirthAndWriteStart) {
             throw new IllegalArgumentException(
                 "At least " + minSecondsBetweenBirthAndWriteStart + " seconds must pass between birth and write start"
@@ -51,23 +93,19 @@ public class AutobiographyCommandHandlerImpl implements AutobiographyCommandHand
             throw new IllegalArgumentException("Write start must not be after publish timestamp");
         }
 
-        Author author = authorRepository.save(
-            new Author()
-                .firstName(letAuthorBeBornAndPublishAutobiographyDto.getFirstName())
-                .lastName(letAuthorBeBornAndPublishAutobiographyDto.getLastName())
-                .birthTimestamp(birthTimestampUtc)
-        );
+        Instant now = Instant.now();
 
-        Book book = bookRepository.save(
-            new Book()
-                .title(letAuthorBeBornAndPublishAutobiographyDto.getBookTitle())
-                .price(letAuthorBeBornAndPublishAutobiographyDto.getBookPrice())
-                .authors(Collections.singleton(author))
-                .writeStartTimestamp(writeStartTimestampUtc)
-                .publishTimestamp(publishTimestampUtc)
-        );
+        if (birthTimestampUtc.isAfter(now)) {
+            throw new IllegalArgumentException("Birth timestamp must not be in the future");
+        }
 
-        return buildAutobiographyResultDTO(author, book);
+        if (writeStartTimestampUtc.isAfter(now)) {
+            throw new IllegalArgumentException("Write start timestamp must not be in the future");
+        }
+
+        if (publishTimestampUtc.isAfter(now)) {
+            throw new IllegalArgumentException("Publish timestamp must not be in the future");
+        }
     }
 
     private long secondsBetween(Instant timestamp1, Instant timestamp2) {
