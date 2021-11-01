@@ -96,12 +96,6 @@ public class BookQueryService extends QueryService<Book> {
             if (criteria.getPrice() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getPrice(), Book_.price));
             }
-            if (criteria.getWrittenById() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(criteria.getWrittenById(), root -> root.join(Book_.writtenBies, JoinType.LEFT).get(Author_.id))
-                    );
-            }
         }
         return specification;
     }

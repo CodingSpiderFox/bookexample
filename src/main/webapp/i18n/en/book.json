@@ -19,8 +19,7 @@
       },
       "id": "ID",
       "name": "Name",
-      "price": "Price",
-      "writtenBy": "Written By"
+      "price": "Price"
     }
   }
 }

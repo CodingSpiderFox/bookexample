@@ -1,8 +1,6 @@
 package com.example.test.domain;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -31,16 +29,6 @@ public class Book implements Serializable {
     @NotNull
     @Column(name = "price", nullable = false)
     private Double price;
-
-    @ManyToMany
-    @NotNull
-    @JoinTable(
-        name = "rel_book__written_by",
-        joinColumns = @JoinColumn(name = "book_id"),
-        inverseJoinColumns = @JoinColumn(name = "written_by_id")
-    )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private Set<Author> writtenBies = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -81,29 +69,6 @@ public class Book implements Serializable {
 
     public void setPrice(Double price) {
         this.price = price;
-    }
-
-    public Set<Author> getWrittenBies() {
-        return this.writtenBies;
-    }
-
-    public void setWrittenBies(Set<Author> authors) {
-        this.writtenBies = authors;
-    }
-
-    public Book writtenBies(Set<Author> authors) {
-        this.setWrittenBies(authors);
-        return this;
-    }
-
-    public Book addWrittenBy(Author author) {
-        this.writtenBies.add(author);
-        return this;
-    }
-
-    public Book removeWrittenBy(Author author) {
-        this.writtenBies.remove(author);
-        return this;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

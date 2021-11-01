@@ -4,8 +4,6 @@ import { Button, Row, Col, FormText } from 'reactstrap';
 import { isNumber, Translate, translate, ValidatedField, ValidatedForm } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { IAuthor } from 'app/shared/model/author.model';
-import { getEntities as getAuthors } from 'app/entities/author/author.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './book.reducer';
 import { IBook } from 'app/shared/model/book.model';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
@@ -17,7 +15,6 @@ export const BookUpdate = (props: RouteComponentProps<{ id: string }>) => {
 
   const [isNew] = useState(!props.match.params || !props.match.params.id);
 
-  const authors = useAppSelector(state => state.author.entities);
   const bookEntity = useAppSelector(state => state.book.entity);
   const loading = useAppSelector(state => state.book.loading);
   const updating = useAppSelector(state => state.book.updating);
@@ -30,8 +27,6 @@ export const BookUpdate = (props: RouteComponentProps<{ id: string }>) => {
     if (!isNew) {
       dispatch(getEntity(props.match.params.id));
     }
-
-    dispatch(getAuthors({}));
   }, []);
 
   useEffect(() => {
@@ -44,7 +39,6 @@ export const BookUpdate = (props: RouteComponentProps<{ id: string }>) => {
     const entity = {
       ...bookEntity,
       ...values,
-      writtenBies: mapIdList(values.writtenBies),
     };
 
     if (isNew) {
@@ -59,7 +53,6 @@ export const BookUpdate = (props: RouteComponentProps<{ id: string }>) => {
       ? {}
       : {
           ...bookEntity,
-          writtenBies: bookEntity?.writtenBies?.map(e => e.id.toString()),
         };
 
   return (
@@ -108,23 +101,6 @@ export const BookUpdate = (props: RouteComponentProps<{ id: string }>) => {
                   validate: v => isNumber(v) || translate('entity.validation.number'),
                 }}
               />
-              <ValidatedField
-                label={translate('constraintissueApp.book.writtenBy')}
-                id="book-writtenBy"
-                data-cy="writtenBy"
-                type="select"
-                multiple
-                name="writtenBies"
-              >
-                <option value="" key="0" />
-                {authors
-                  ? authors.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
-                      </option>
-                    ))
-                  : null}
-              </ValidatedField>
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/book" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;

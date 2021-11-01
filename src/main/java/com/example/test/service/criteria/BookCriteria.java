@@ -30,8 +30,6 @@ public class BookCriteria implements Serializable, Criteria {
 
     private DoubleFilter price;
 
-    private LongFilter writtenById;
-
     private Boolean distinct;
 
     public BookCriteria() {}
@@ -40,7 +38,6 @@ public class BookCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.price = other.price == null ? null : other.price.copy();
-        this.writtenById = other.writtenById == null ? null : other.writtenById.copy();
         this.distinct = other.distinct;
     }
 
@@ -94,21 +91,6 @@ public class BookCriteria implements Serializable, Criteria {
         this.price = price;
     }
 
-    public LongFilter getWrittenById() {
-        return writtenById;
-    }
-
-    public LongFilter writtenById() {
-        if (writtenById == null) {
-            writtenById = new LongFilter();
-        }
-        return writtenById;
-    }
-
-    public void setWrittenById(LongFilter writtenById) {
-        this.writtenById = writtenById;
-    }
-
     public Boolean getDistinct() {
         return distinct;
     }
@@ -130,14 +112,13 @@ public class BookCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(name, that.name) &&
             Objects.equals(price, that.price) &&
-            Objects.equals(writtenById, that.writtenById) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, price, writtenById, distinct);
+        return Objects.hash(id, name, price, distinct);
     }
 
     // prettier-ignore
@@ -147,7 +128,6 @@ public class BookCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (name != null ? "name=" + name + ", " : "") +
             (price != null ? "price=" + price + ", " : "") +
-            (writtenById != null ? "writtenById=" + writtenById + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }
