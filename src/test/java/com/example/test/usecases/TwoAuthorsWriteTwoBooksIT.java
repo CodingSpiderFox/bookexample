@@ -15,6 +15,7 @@ import com.example.test.service.mapper.AuthorMapper;
 import com.example.test.service.mapper.BookMapper;
 import com.example.test.web.rest.TestUtil;
 import javax.persistence.EntityManager;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -44,6 +45,12 @@ public class TwoAuthorsWriteTwoBooksIT {
 
     @Autowired
     private AuthorRepository authorRepository;
+
+    @AfterEach
+    void tearDown() {
+        bookRepository.deleteAll();
+        authorRepository.deleteAll();
+    }
 
     @Test
     void letTwoBooksBeWrittenBySameTwoAuthors() throws Exception {
