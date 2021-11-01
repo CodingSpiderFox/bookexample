@@ -34,6 +34,14 @@ public interface BookService {
     Page<BookDTO> findAll(Pageable pageable);
 
     /**
+     * Get all the books with eager load of many-to-many relationships.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    Page<BookDTO> findAllWithEagerRelationships(Pageable pageable);
+
+    /**
      * Get the "id" book.
      *
      * @param id the id of the entity.

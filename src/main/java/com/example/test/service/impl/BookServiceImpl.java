@@ -61,11 +61,15 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findAll(pageable).map(bookMapper::toDto);
     }
 
+    public Page<BookDTO> findAllWithEagerRelationships(Pageable pageable) {
+        return bookRepository.findAllWithEagerRelationships(pageable).map(bookMapper::toDto);
+    }
+
     @Override
     @Transactional(readOnly = true)
     public Optional<BookDTO> findOne(Long id) {
         log.debug("Request to get Book : {}", id);
-        return bookRepository.findById(id).map(bookMapper::toDto);
+        return bookRepository.findOneWithEagerRelationships(id).map(bookMapper::toDto);
     }
 
     @Override

@@ -41,6 +41,19 @@ export const BookDetail = (props: RouteComponentProps<{ id: string }>) => {
             </span>
           </dt>
           <dd>{bookEntity.price}</dd>
+          <dt>
+            <Translate contentKey="constraintissueApp.book.author">Author</Translate>
+          </dt>
+          <dd>
+            {bookEntity.authors
+              ? bookEntity.authors.map((val, i) => (
+                  <span key={val.id}>
+                    <a>{val.id}</a>
+                    {bookEntity.authors && i === bookEntity.authors.length - 1 ? '' : ', '}
+                  </span>
+                ))
+              : null}
+          </dd>
         </dl>
         <Button tag={Link} to="/book" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}

@@ -19,6 +19,7 @@ describe('Book e2e test', () => {
   const bookSample = { name: 'infrastructures', price: 39916 };
 
   let book: any;
+  let author: any;
 
   before(() => {
     cy.window().then(win => {
@@ -30,9 +31,28 @@ describe('Book e2e test', () => {
   });
 
   beforeEach(() => {
+    // create an instance at the required relationship entity:
+    cy.authenticatedRequest({
+      method: 'POST',
+      url: '/api/authors',
+      body: { firstName: 'Reece', lastName: 'West' },
+    }).then(({ body }) => {
+      author = body;
+    });
+  });
+
+  beforeEach(() => {
     cy.intercept('GET', '/api/books+(?*|)').as('entitiesRequest');
     cy.intercept('POST', '/api/books').as('postEntityRequest');
     cy.intercept('DELETE', '/api/books/*').as('deleteEntityRequest');
+  });
+
+  beforeEach(() => {
+    // Simulate relationships api for better performance and reproducibility.
+    cy.intercept('GET', '/api/authors', {
+      statusCode: 200,
+      body: [author],
+    });
   });
 
   afterEach(() => {
@@ -42,6 +62,17 @@ describe('Book e2e test', () => {
         url: `/api/books/${book.id}`,
       }).then(() => {
         book = undefined;
+      });
+    }
+  });
+
+  afterEach(() => {
+    if (author) {
+      cy.authenticatedRequest({
+        method: 'DELETE',
+        url: `/api/authors/${author.id}`,
+      }).then(() => {
+        author = undefined;
       });
     }
   });
@@ -85,7 +116,11 @@ describe('Book e2e test', () => {
         cy.authenticatedRequest({
           method: 'POST',
           url: '/api/books',
-          body: bookSample,
+
+          body: {
+            ...bookSample,
+            author: author,
+          },
         }).then(({ body }) => {
           book = body;
 
@@ -158,6 +193,8 @@ describe('Book e2e test', () => {
       cy.get(`[data-cy="name"]`).type('Oregon zero').should('have.value', 'Oregon zero');
 
       cy.get(`[data-cy="price"]`).type('47549').should('have.value', '47549');
+
+      cy.get(`[data-cy="author"]`).select([0]);
 
       cy.get(entityCreateSaveButtonSelector).click();
 

@@ -11,7 +11,17 @@
       "fieldValidateRules": ["required"]
     }
   ],
-  "relationships": [],
+  "relationships": [
+    {
+      "relationshipName": "author",
+      "otherEntityName": "author",
+      "relationshipType": "many-to-many",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "id",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "book"
+    }
+  ],
   "service": "serviceImpl",
   "dto": "mapstruct",
   "jpaMetamodelFiltering": true,
