@@ -14,6 +14,8 @@ import com.example.test.service.BookService;
 import com.example.test.service.criteria.BookCriteria;
 import com.example.test.service.dto.BookDTO;
 import com.example.test.service.mapper.BookMapper;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -49,6 +51,12 @@ class BookResourceIT {
     private static final String DEFAULT_TITLE = "AAAAAAAAAA";
     private static final String UPDATED_TITLE = "BBBBBBBBBB";
 
+    private static final Instant DEFAULT_WRITE_START_TIMESTAMP = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_WRITE_START_TIMESTAMP = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+
+    private static final Instant DEFAULT_PUBLISH_TIMESTAMP = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_PUBLISH_TIMESTAMP = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+
     private static final String ENTITY_API_URL = "/api/books";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -82,7 +90,11 @@ class BookResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Book createEntity(EntityManager em) {
-        Book book = new Book().price(DEFAULT_PRICE).title(DEFAULT_TITLE);
+        Book book = new Book()
+            .price(DEFAULT_PRICE)
+            .title(DEFAULT_TITLE)
+            .writeStartTimestamp(DEFAULT_WRITE_START_TIMESTAMP)
+            .publishTimestamp(DEFAULT_PUBLISH_TIMESTAMP);
         // Add required entity
         Author author;
         if (TestUtil.findAll(em, Author.class).isEmpty()) {
@@ -103,7 +115,11 @@ class BookResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Book createUpdatedEntity(EntityManager em) {
-        Book book = new Book().price(UPDATED_PRICE).title(UPDATED_TITLE);
+        Book book = new Book()
+            .price(UPDATED_PRICE)
+            .title(UPDATED_TITLE)
+            .writeStartTimestamp(UPDATED_WRITE_START_TIMESTAMP)
+            .publishTimestamp(UPDATED_PUBLISH_TIMESTAMP);
         // Add required entity
         Author author;
         if (TestUtil.findAll(em, Author.class).isEmpty()) {
@@ -138,6 +154,8 @@ class BookResourceIT {
         Book testBook = bookList.get(bookList.size() - 1);
         assertThat(testBook.getPrice()).isEqualTo(DEFAULT_PRICE);
         assertThat(testBook.getTitle()).isEqualTo(DEFAULT_TITLE);
+        assertThat(testBook.getWriteStartTimestamp()).isEqualTo(DEFAULT_WRITE_START_TIMESTAMP);
+        assertThat(testBook.getPublishTimestamp()).isEqualTo(DEFAULT_PUBLISH_TIMESTAMP);
     }
 
     @Test
@@ -208,7 +226,9 @@ class BookResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(book.getId().intValue())))
             .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.doubleValue())))
-            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)));
+            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
+            .andExpect(jsonPath("$.[*].writeStartTimestamp").value(hasItem(DEFAULT_WRITE_START_TIMESTAMP.toString())))
+            .andExpect(jsonPath("$.[*].publishTimestamp").value(hasItem(DEFAULT_PUBLISH_TIMESTAMP.toString())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -242,7 +262,9 @@ class BookResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(book.getId().intValue()))
             .andExpect(jsonPath("$.price").value(DEFAULT_PRICE.doubleValue()))
-            .andExpect(jsonPath("$.title").value(DEFAULT_TITLE));
+            .andExpect(jsonPath("$.title").value(DEFAULT_TITLE))
+            .andExpect(jsonPath("$.writeStartTimestamp").value(DEFAULT_WRITE_START_TIMESTAMP.toString()))
+            .andExpect(jsonPath("$.publishTimestamp").value(DEFAULT_PUBLISH_TIMESTAMP.toString()));
     }
 
     @Test
@@ -447,6 +469,110 @@ class BookResourceIT {
 
     @Test
     @Transactional
+    void getAllBooksByWriteStartTimestampIsEqualToSomething() throws Exception {
+        // Initialize the database
+        bookRepository.saveAndFlush(book);
+
+        // Get all the bookList where writeStartTimestamp equals to DEFAULT_WRITE_START_TIMESTAMP
+        defaultBookShouldBeFound("writeStartTimestamp.equals=" + DEFAULT_WRITE_START_TIMESTAMP);
+
+        // Get all the bookList where writeStartTimestamp equals to UPDATED_WRITE_START_TIMESTAMP
+        defaultBookShouldNotBeFound("writeStartTimestamp.equals=" + UPDATED_WRITE_START_TIMESTAMP);
+    }
+
+    @Test
+    @Transactional
+    void getAllBooksByWriteStartTimestampIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        bookRepository.saveAndFlush(book);
+
+        // Get all the bookList where writeStartTimestamp not equals to DEFAULT_WRITE_START_TIMESTAMP
+        defaultBookShouldNotBeFound("writeStartTimestamp.notEquals=" + DEFAULT_WRITE_START_TIMESTAMP);
+
+        // Get all the bookList where writeStartTimestamp not equals to UPDATED_WRITE_START_TIMESTAMP
+        defaultBookShouldBeFound("writeStartTimestamp.notEquals=" + UPDATED_WRITE_START_TIMESTAMP);
+    }
+
+    @Test
+    @Transactional
+    void getAllBooksByWriteStartTimestampIsInShouldWork() throws Exception {
+        // Initialize the database
+        bookRepository.saveAndFlush(book);
+
+        // Get all the bookList where writeStartTimestamp in DEFAULT_WRITE_START_TIMESTAMP or UPDATED_WRITE_START_TIMESTAMP
+        defaultBookShouldBeFound("writeStartTimestamp.in=" + DEFAULT_WRITE_START_TIMESTAMP + "," + UPDATED_WRITE_START_TIMESTAMP);
+
+        // Get all the bookList where writeStartTimestamp equals to UPDATED_WRITE_START_TIMESTAMP
+        defaultBookShouldNotBeFound("writeStartTimestamp.in=" + UPDATED_WRITE_START_TIMESTAMP);
+    }
+
+    @Test
+    @Transactional
+    void getAllBooksByWriteStartTimestampIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        bookRepository.saveAndFlush(book);
+
+        // Get all the bookList where writeStartTimestamp is not null
+        defaultBookShouldBeFound("writeStartTimestamp.specified=true");
+
+        // Get all the bookList where writeStartTimestamp is null
+        defaultBookShouldNotBeFound("writeStartTimestamp.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllBooksByPublishTimestampIsEqualToSomething() throws Exception {
+        // Initialize the database
+        bookRepository.saveAndFlush(book);
+
+        // Get all the bookList where publishTimestamp equals to DEFAULT_PUBLISH_TIMESTAMP
+        defaultBookShouldBeFound("publishTimestamp.equals=" + DEFAULT_PUBLISH_TIMESTAMP);
+
+        // Get all the bookList where publishTimestamp equals to UPDATED_PUBLISH_TIMESTAMP
+        defaultBookShouldNotBeFound("publishTimestamp.equals=" + UPDATED_PUBLISH_TIMESTAMP);
+    }
+
+    @Test
+    @Transactional
+    void getAllBooksByPublishTimestampIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        bookRepository.saveAndFlush(book);
+
+        // Get all the bookList where publishTimestamp not equals to DEFAULT_PUBLISH_TIMESTAMP
+        defaultBookShouldNotBeFound("publishTimestamp.notEquals=" + DEFAULT_PUBLISH_TIMESTAMP);
+
+        // Get all the bookList where publishTimestamp not equals to UPDATED_PUBLISH_TIMESTAMP
+        defaultBookShouldBeFound("publishTimestamp.notEquals=" + UPDATED_PUBLISH_TIMESTAMP);
+    }
+
+    @Test
+    @Transactional
+    void getAllBooksByPublishTimestampIsInShouldWork() throws Exception {
+        // Initialize the database
+        bookRepository.saveAndFlush(book);
+
+        // Get all the bookList where publishTimestamp in DEFAULT_PUBLISH_TIMESTAMP or UPDATED_PUBLISH_TIMESTAMP
+        defaultBookShouldBeFound("publishTimestamp.in=" + DEFAULT_PUBLISH_TIMESTAMP + "," + UPDATED_PUBLISH_TIMESTAMP);
+
+        // Get all the bookList where publishTimestamp equals to UPDATED_PUBLISH_TIMESTAMP
+        defaultBookShouldNotBeFound("publishTimestamp.in=" + UPDATED_PUBLISH_TIMESTAMP);
+    }
+
+    @Test
+    @Transactional
+    void getAllBooksByPublishTimestampIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        bookRepository.saveAndFlush(book);
+
+        // Get all the bookList where publishTimestamp is not null
+        defaultBookShouldBeFound("publishTimestamp.specified=true");
+
+        // Get all the bookList where publishTimestamp is null
+        defaultBookShouldNotBeFound("publishTimestamp.specified=false");
+    }
+
+    @Test
+    @Transactional
     void getAllBooksByAuthorIsEqualToSomething() throws Exception {
         // Initialize the database
         bookRepository.saveAndFlush(book);
@@ -481,7 +607,9 @@ class BookResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(book.getId().intValue())))
             .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.doubleValue())))
-            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)));
+            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
+            .andExpect(jsonPath("$.[*].writeStartTimestamp").value(hasItem(DEFAULT_WRITE_START_TIMESTAMP.toString())))
+            .andExpect(jsonPath("$.[*].publishTimestamp").value(hasItem(DEFAULT_PUBLISH_TIMESTAMP.toString())));
 
         // Check, that the count call also returns 1
         restBookMockMvc
@@ -529,7 +657,11 @@ class BookResourceIT {
         Book updatedBook = bookRepository.findById(book.getId()).get();
         // Disconnect from session so that the updates on updatedBook are not directly saved in db
         em.detach(updatedBook);
-        updatedBook.price(UPDATED_PRICE).title(UPDATED_TITLE);
+        updatedBook
+            .price(UPDATED_PRICE)
+            .title(UPDATED_TITLE)
+            .writeStartTimestamp(UPDATED_WRITE_START_TIMESTAMP)
+            .publishTimestamp(UPDATED_PUBLISH_TIMESTAMP);
         BookDTO bookDTO = bookMapper.toDto(updatedBook);
 
         restBookMockMvc
@@ -546,6 +678,8 @@ class BookResourceIT {
         Book testBook = bookList.get(bookList.size() - 1);
         assertThat(testBook.getPrice()).isEqualTo(UPDATED_PRICE);
         assertThat(testBook.getTitle()).isEqualTo(UPDATED_TITLE);
+        assertThat(testBook.getWriteStartTimestamp()).isEqualTo(UPDATED_WRITE_START_TIMESTAMP);
+        assertThat(testBook.getPublishTimestamp()).isEqualTo(UPDATED_PUBLISH_TIMESTAMP);
     }
 
     @Test
@@ -639,6 +773,8 @@ class BookResourceIT {
         Book testBook = bookList.get(bookList.size() - 1);
         assertThat(testBook.getPrice()).isEqualTo(DEFAULT_PRICE);
         assertThat(testBook.getTitle()).isEqualTo(DEFAULT_TITLE);
+        assertThat(testBook.getWriteStartTimestamp()).isEqualTo(DEFAULT_WRITE_START_TIMESTAMP);
+        assertThat(testBook.getPublishTimestamp()).isEqualTo(DEFAULT_PUBLISH_TIMESTAMP);
     }
 
     @Test
@@ -653,7 +789,11 @@ class BookResourceIT {
         Book partialUpdatedBook = new Book();
         partialUpdatedBook.setId(book.getId());
 
-        partialUpdatedBook.price(UPDATED_PRICE).title(UPDATED_TITLE);
+        partialUpdatedBook
+            .price(UPDATED_PRICE)
+            .title(UPDATED_TITLE)
+            .writeStartTimestamp(UPDATED_WRITE_START_TIMESTAMP)
+            .publishTimestamp(UPDATED_PUBLISH_TIMESTAMP);
 
         restBookMockMvc
             .perform(
@@ -669,6 +809,8 @@ class BookResourceIT {
         Book testBook = bookList.get(bookList.size() - 1);
         assertThat(testBook.getPrice()).isEqualTo(UPDATED_PRICE);
         assertThat(testBook.getTitle()).isEqualTo(UPDATED_TITLE);
+        assertThat(testBook.getWriteStartTimestamp()).isEqualTo(UPDATED_WRITE_START_TIMESTAMP);
+        assertThat(testBook.getPublishTimestamp()).isEqualTo(UPDATED_PUBLISH_TIMESTAMP);
     }
 
     @Test

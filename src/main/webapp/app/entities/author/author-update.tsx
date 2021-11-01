@@ -36,6 +36,8 @@ export const AuthorUpdate = (props: RouteComponentProps<{ id: string }>) => {
   }, [updateSuccess]);
 
   const saveEntity = values => {
+    values.birthTimestamp = convertDateTimeToServer(values.birthTimestamp);
+
     const entity = {
       ...authorEntity,
       ...values,
@@ -50,9 +52,12 @@ export const AuthorUpdate = (props: RouteComponentProps<{ id: string }>) => {
 
   const defaultValues = () =>
     isNew
-      ? {}
+      ? {
+          birthTimestamp: displayDefaultDateTime(),
+        }
       : {
           ...authorEntity,
+          birthTimestamp: convertDateTimeFromServer(authorEntity.birthTimestamp),
         };
 
   return (
@@ -99,6 +104,14 @@ export const AuthorUpdate = (props: RouteComponentProps<{ id: string }>) => {
                 validate={{
                   required: { value: true, message: translate('entity.validation.required') },
                 }}
+              />
+              <ValidatedField
+                label={translate('constraintissueApp.author.birthTimestamp')}
+                id="author-birthTimestamp"
+                name="birthTimestamp"
+                data-cy="birthTimestamp"
+                type="datetime-local"
+                placeholder="YYYY-MM-DD HH:mm"
               />
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/author" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />

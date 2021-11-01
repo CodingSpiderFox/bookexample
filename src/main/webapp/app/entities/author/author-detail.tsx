@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
-import { Translate } from 'react-jhipster';
+import { Translate, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { getEntity } from './author.reducer';
@@ -41,6 +41,14 @@ export const AuthorDetail = (props: RouteComponentProps<{ id: string }>) => {
             </span>
           </dt>
           <dd>{authorEntity.lastName}</dd>
+          <dt>
+            <span id="birthTimestamp">
+              <Translate contentKey="constraintissueApp.author.birthTimestamp">Birth Timestamp</Translate>
+            </span>
+          </dt>
+          <dd>
+            {authorEntity.birthTimestamp ? <TextFormat value={authorEntity.birthTimestamp} type="date" format={APP_DATE_FORMAT} /> : null}
+          </dd>
         </dl>
         <Button tag={Link} to="/author" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}

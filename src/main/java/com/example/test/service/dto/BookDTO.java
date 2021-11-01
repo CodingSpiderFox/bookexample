@@ -1,6 +1,7 @@
 package com.example.test.service.dto;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -18,6 +19,10 @@ public class BookDTO implements Serializable {
 
     @NotNull
     private String title;
+
+    private Instant writeStartTimestamp;
+
+    private Instant publishTimestamp;
 
     private Set<AuthorDTO> authors = new HashSet<>();
 
@@ -43,6 +48,22 @@ public class BookDTO implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Instant getWriteStartTimestamp() {
+        return writeStartTimestamp;
+    }
+
+    public void setWriteStartTimestamp(Instant writeStartTimestamp) {
+        this.writeStartTimestamp = writeStartTimestamp;
+    }
+
+    public Instant getPublishTimestamp() {
+        return publishTimestamp;
+    }
+
+    public void setPublishTimestamp(Instant publishTimestamp) {
+        this.publishTimestamp = publishTimestamp;
     }
 
     public Set<AuthorDTO> getAuthors() {
@@ -81,6 +102,8 @@ public class BookDTO implements Serializable {
             "id=" + getId() +
             ", price=" + getPrice() +
             ", title='" + getTitle() + "'" +
+            ", writeStartTimestamp='" + getWriteStartTimestamp() + "'" +
+            ", publishTimestamp='" + getPublishTimestamp() + "'" +
             ", authors=" + getAuthors() +
             "}";
     }

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
-import { Translate } from 'react-jhipster';
+import { Translate, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { getEntity } from './book.reducer';
@@ -41,6 +41,24 @@ export const BookDetail = (props: RouteComponentProps<{ id: string }>) => {
             </span>
           </dt>
           <dd>{bookEntity.title}</dd>
+          <dt>
+            <span id="writeStartTimestamp">
+              <Translate contentKey="constraintissueApp.book.writeStartTimestamp">Write Start Timestamp</Translate>
+            </span>
+          </dt>
+          <dd>
+            {bookEntity.writeStartTimestamp ? (
+              <TextFormat value={bookEntity.writeStartTimestamp} type="date" format={APP_DATE_FORMAT} />
+            ) : null}
+          </dd>
+          <dt>
+            <span id="publishTimestamp">
+              <Translate contentKey="constraintissueApp.book.publishTimestamp">Publish Timestamp</Translate>
+            </span>
+          </dt>
+          <dd>
+            {bookEntity.publishTimestamp ? <TextFormat value={bookEntity.publishTimestamp} type="date" format={APP_DATE_FORMAT} /> : null}
+          </dd>
           <dt>
             <Translate contentKey="constraintissueApp.book.author">Author</Translate>
           </dt>

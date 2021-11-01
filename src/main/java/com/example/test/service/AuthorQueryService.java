@@ -96,6 +96,9 @@ public class AuthorQueryService extends QueryService<Author> {
             if (criteria.getLastName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getLastName(), Author_.lastName));
             }
+            if (criteria.getBirthTimestamp() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getBirthTimestamp(), Author_.birthTimestamp));
+            }
         }
         return specification;
     }

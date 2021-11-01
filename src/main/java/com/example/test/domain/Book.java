@@ -1,6 +1,7 @@
 package com.example.test.domain;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
@@ -31,6 +32,12 @@ public class Book implements Serializable {
     @NotNull
     @Column(name = "title", nullable = false)
     private String title;
+
+    @Column(name = "write_start_timestamp")
+    private Instant writeStartTimestamp;
+
+    @Column(name = "publish_timestamp")
+    private Instant publishTimestamp;
 
     @ManyToMany
     @NotNull
@@ -77,6 +84,32 @@ public class Book implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Instant getWriteStartTimestamp() {
+        return this.writeStartTimestamp;
+    }
+
+    public Book writeStartTimestamp(Instant writeStartTimestamp) {
+        this.setWriteStartTimestamp(writeStartTimestamp);
+        return this;
+    }
+
+    public void setWriteStartTimestamp(Instant writeStartTimestamp) {
+        this.writeStartTimestamp = writeStartTimestamp;
+    }
+
+    public Instant getPublishTimestamp() {
+        return this.publishTimestamp;
+    }
+
+    public Book publishTimestamp(Instant publishTimestamp) {
+        this.setPublishTimestamp(publishTimestamp);
+        return this;
+    }
+
+    public void setPublishTimestamp(Instant publishTimestamp) {
+        this.publishTimestamp = publishTimestamp;
     }
 
     public Set<Author> getAuthors() {
@@ -128,6 +161,8 @@ public class Book implements Serializable {
             "id=" + getId() +
             ", price=" + getPrice() +
             ", title='" + getTitle() + "'" +
+            ", writeStartTimestamp='" + getWriteStartTimestamp() + "'" +
+            ", publishTimestamp='" + getPublishTimestamp() + "'" +
             "}";
     }
 }

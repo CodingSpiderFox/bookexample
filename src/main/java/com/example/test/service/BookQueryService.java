@@ -96,6 +96,12 @@ public class BookQueryService extends QueryService<Book> {
             if (criteria.getTitle() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getTitle(), Book_.title));
             }
+            if (criteria.getWriteStartTimestamp() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getWriteStartTimestamp(), Book_.writeStartTimestamp));
+            }
+            if (criteria.getPublishTimestamp() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getPublishTimestamp(), Book_.publishTimestamp));
+            }
             if (criteria.getAuthorId() != null) {
                 specification =
                     specification.and(

@@ -9,6 +9,14 @@
       "fieldName": "title",
       "fieldType": "String",
       "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "writeStartTimestamp",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "publishTimestamp",
+      "fieldType": "Instant"
     }
   ],
   "relationships": [

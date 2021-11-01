@@ -1,11 +1,11 @@
-id;price;title
-1;59140;index
-2;86511;firewall
-3;89620;SAS
-4;79996;forecast
-5;6904;Principal compress state
-6;78529;intuitive Center Georgia
-7;51293;Designer connect
-8;55737;Accountability
-9;56683;auxiliary Pula Representative
-10;83946;Bedfordshire driver Soft
+id;price;title;write_start_timestamp;publish_timestamp
+1;59140;index;2021-10-31T15:29:08;2021-11-01T07:54:21
+2;73692;Vermont SAS;2021-10-31T17:02:57;2021-11-01T08:07:48
+3;32786;Bahrain Principal;2021-10-31T17:45:29;2021-11-01T05:42:24
+4;75640;Configuration Director high-level;2021-11-01T00:48:36;2021-10-31T22:17:24
+5;18077;Borders Sudan Mall;2021-11-01T04:48:57;2021-10-31T13:09:24
+6;87280;Texas Industrial;2021-11-01T09:12:29;2021-11-01T03:14:40
+7;98018;software Bedfordshire driver;2021-11-01T08:45:30;2021-10-31T16:38:53
+8;55808;Games;2021-10-31T21:43:00;2021-10-31T15:06:42
+9;33648;payment markets;2021-11-01T07:28:12;2021-10-31T18:05:39
+10;16847;bus;2021-11-01T10:38:36;2021-10-31T16:43:58

@@ -7,6 +7,7 @@ import tech.jhipster.service.filter.BooleanFilter;
 import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.FloatFilter;
+import tech.jhipster.service.filter.InstantFilter;
 import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
@@ -30,6 +31,10 @@ public class BookCriteria implements Serializable, Criteria {
 
     private StringFilter title;
 
+    private InstantFilter writeStartTimestamp;
+
+    private InstantFilter publishTimestamp;
+
     private LongFilter authorId;
 
     private Boolean distinct;
@@ -40,6 +45,8 @@ public class BookCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.price = other.price == null ? null : other.price.copy();
         this.title = other.title == null ? null : other.title.copy();
+        this.writeStartTimestamp = other.writeStartTimestamp == null ? null : other.writeStartTimestamp.copy();
+        this.publishTimestamp = other.publishTimestamp == null ? null : other.publishTimestamp.copy();
         this.authorId = other.authorId == null ? null : other.authorId.copy();
         this.distinct = other.distinct;
     }
@@ -94,6 +101,36 @@ public class BookCriteria implements Serializable, Criteria {
         this.title = title;
     }
 
+    public InstantFilter getWriteStartTimestamp() {
+        return writeStartTimestamp;
+    }
+
+    public InstantFilter writeStartTimestamp() {
+        if (writeStartTimestamp == null) {
+            writeStartTimestamp = new InstantFilter();
+        }
+        return writeStartTimestamp;
+    }
+
+    public void setWriteStartTimestamp(InstantFilter writeStartTimestamp) {
+        this.writeStartTimestamp = writeStartTimestamp;
+    }
+
+    public InstantFilter getPublishTimestamp() {
+        return publishTimestamp;
+    }
+
+    public InstantFilter publishTimestamp() {
+        if (publishTimestamp == null) {
+            publishTimestamp = new InstantFilter();
+        }
+        return publishTimestamp;
+    }
+
+    public void setPublishTimestamp(InstantFilter publishTimestamp) {
+        this.publishTimestamp = publishTimestamp;
+    }
+
     public LongFilter getAuthorId() {
         return authorId;
     }
@@ -130,6 +167,8 @@ public class BookCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(price, that.price) &&
             Objects.equals(title, that.title) &&
+            Objects.equals(writeStartTimestamp, that.writeStartTimestamp) &&
+            Objects.equals(publishTimestamp, that.publishTimestamp) &&
             Objects.equals(authorId, that.authorId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -137,7 +176,7 @@ public class BookCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, price, title, authorId, distinct);
+        return Objects.hash(id, price, title, writeStartTimestamp, publishTimestamp, authorId, distinct);
     }
 
     // prettier-ignore
@@ -147,6 +186,8 @@ public class BookCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (price != null ? "price=" + price + ", " : "") +
             (title != null ? "title=" + title + ", " : "") +
+            (writeStartTimestamp != null ? "writeStartTimestamp=" + writeStartTimestamp + ", " : "") +
+            (publishTimestamp != null ? "publishTimestamp=" + publishTimestamp + ", " : "") +
             (authorId != null ? "authorId=" + authorId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

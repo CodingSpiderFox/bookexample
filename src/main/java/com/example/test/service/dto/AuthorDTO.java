@@ -1,6 +1,7 @@
 package com.example.test.service.dto;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Objects;
 import javax.validation.constraints.*;
 
@@ -16,6 +17,8 @@ public class AuthorDTO implements Serializable {
 
     @NotNull
     private String lastName;
+
+    private Instant birthTimestamp;
 
     public Long getId() {
         return id;
@@ -39,6 +42,14 @@ public class AuthorDTO implements Serializable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Instant getBirthTimestamp() {
+        return birthTimestamp;
+    }
+
+    public void setBirthTimestamp(Instant birthTimestamp) {
+        this.birthTimestamp = birthTimestamp;
     }
 
     @Override
@@ -69,6 +80,7 @@ public class AuthorDTO implements Serializable {
             "id=" + getId() +
             ", firstName='" + getFirstName() + "'" +
             ", lastName='" + getLastName() + "'" +
+            ", birthTimestamp='" + getBirthTimestamp() + "'" +
             "}";
     }
 }

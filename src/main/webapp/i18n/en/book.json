@@ -20,6 +20,8 @@
       "id": "ID",
       "price": "Price",
       "title": "Title",
+      "writeStartTimestamp": "Write Start Timestamp",
+      "publishTimestamp": "Publish Timestamp",
       "author": "Author"
     }
   }

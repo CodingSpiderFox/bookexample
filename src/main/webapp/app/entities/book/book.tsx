@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Col, Row, Table } from 'reactstrap';
-import { Translate, getSortState } from 'react-jhipster';
+import { Translate, TextFormat, getSortState } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { getEntities, reset } from './book.reducer';
@@ -131,6 +131,14 @@ export const Book = (props: RouteComponentProps<{ url: string }>) => {
                   <th className="hand" onClick={sort('title')}>
                     <Translate contentKey="constraintissueApp.book.title">Title</Translate> <FontAwesomeIcon icon="sort" />
                   </th>
+                  <th className="hand" onClick={sort('writeStartTimestamp')}>
+                    <Translate contentKey="constraintissueApp.book.writeStartTimestamp">Write Start Timestamp</Translate>{' '}
+                    <FontAwesomeIcon icon="sort" />
+                  </th>
+                  <th className="hand" onClick={sort('publishTimestamp')}>
+                    <Translate contentKey="constraintissueApp.book.publishTimestamp">Publish Timestamp</Translate>{' '}
+                    <FontAwesomeIcon icon="sort" />
+                  </th>
                   <th />
                 </tr>
               </thead>
@@ -144,6 +152,14 @@ export const Book = (props: RouteComponentProps<{ url: string }>) => {
                     </td>
                     <td>{book.price}</td>
                     <td>{book.title}</td>
+                    <td>
+                      {book.writeStartTimestamp ? (
+                        <TextFormat type="date" value={book.writeStartTimestamp} format={APP_DATE_FORMAT} />
+                      ) : null}
+                    </td>
+                    <td>
+                      {book.publishTimestamp ? <TextFormat type="date" value={book.publishTimestamp} format={APP_DATE_FORMAT} /> : null}
+                    </td>
                     <td className="text-right">
                       <div className="btn-group flex-btn-group-container">
                         <Button tag={Link} to={`${match.url}/${book.id}`} color="info" size="sm" data-cy="entityDetailsButton">

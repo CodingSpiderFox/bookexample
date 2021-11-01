@@ -16,7 +16,7 @@ describe('Book e2e test', () => {
   const bookPageUrlPattern = new RegExp('/book(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const bookSample = { price: 32204, title: 'Soft online' };
+  const bookSample = { price: 12179, title: 'extend indexing Bedfordshire' };
 
   let book: any;
   let author: any;
@@ -35,7 +35,7 @@ describe('Book e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/authors',
-      body: { firstName: 'Reece', lastName: 'West' },
+      body: { firstName: 'Reece', lastName: 'West', birthTimestamp: '2021-11-01T02:51:17.693Z' },
     }).then(({ body }) => {
       author = body;
     });
@@ -193,6 +193,10 @@ describe('Book e2e test', () => {
       cy.get(`[data-cy="price"]`).type('51838').should('have.value', '51838');
 
       cy.get(`[data-cy="title"]`).type('monitor Supervisor').should('have.value', 'monitor Supervisor');
+
+      cy.get(`[data-cy="writeStartTimestamp"]`).type('2021-11-01T04:31').should('have.value', '2021-11-01T04:31');
+
+      cy.get(`[data-cy="publishTimestamp"]`).type('2021-11-01T02:04').should('have.value', '2021-11-01T02:04');
 
       cy.get(`[data-cy="author"]`).select([0]);
 

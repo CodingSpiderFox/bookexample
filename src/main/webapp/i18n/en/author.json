@@ -19,7 +19,8 @@
       },
       "id": "ID",
       "firstName": "First Name",
-      "lastName": "Last Name"
+      "lastName": "Last Name",
+      "birthTimestamp": "Birth Timestamp"
     }
   }
 }

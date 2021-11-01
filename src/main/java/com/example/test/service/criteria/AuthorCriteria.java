@@ -7,6 +7,7 @@ import tech.jhipster.service.filter.BooleanFilter;
 import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.FloatFilter;
+import tech.jhipster.service.filter.InstantFilter;
 import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
@@ -30,6 +31,8 @@ public class AuthorCriteria implements Serializable, Criteria {
 
     private StringFilter lastName;
 
+    private InstantFilter birthTimestamp;
+
     private Boolean distinct;
 
     public AuthorCriteria() {}
@@ -38,6 +41,7 @@ public class AuthorCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.firstName = other.firstName == null ? null : other.firstName.copy();
         this.lastName = other.lastName == null ? null : other.lastName.copy();
+        this.birthTimestamp = other.birthTimestamp == null ? null : other.birthTimestamp.copy();
         this.distinct = other.distinct;
     }
 
@@ -91,6 +95,21 @@ public class AuthorCriteria implements Serializable, Criteria {
         this.lastName = lastName;
     }
 
+    public InstantFilter getBirthTimestamp() {
+        return birthTimestamp;
+    }
+
+    public InstantFilter birthTimestamp() {
+        if (birthTimestamp == null) {
+            birthTimestamp = new InstantFilter();
+        }
+        return birthTimestamp;
+    }
+
+    public void setBirthTimestamp(InstantFilter birthTimestamp) {
+        this.birthTimestamp = birthTimestamp;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -112,13 +131,14 @@ public class AuthorCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(firstName, that.firstName) &&
             Objects.equals(lastName, that.lastName) &&
+            Objects.equals(birthTimestamp, that.birthTimestamp) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, distinct);
+        return Objects.hash(id, firstName, lastName, birthTimestamp, distinct);
     }
 
     // prettier-ignore
@@ -128,6 +148,7 @@ public class AuthorCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (firstName != null ? "firstName=" + firstName + ", " : "") +
             (lastName != null ? "lastName=" + lastName + ", " : "") +
+            (birthTimestamp != null ? "birthTimestamp=" + birthTimestamp + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

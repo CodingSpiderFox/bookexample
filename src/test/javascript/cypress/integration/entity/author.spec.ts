@@ -16,7 +16,7 @@ describe('Author e2e test', () => {
   const authorPageUrlPattern = new RegExp('/author(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const authorSample = { firstName: 'Telly', lastName: 'Hilpert' };
+  const authorSample = { firstName: 'Gabrielle', lastName: 'Mills' };
 
   let author: any;
 
@@ -158,6 +158,8 @@ describe('Author e2e test', () => {
       cy.get(`[data-cy="firstName"]`).type('Geraldine').should('have.value', 'Geraldine');
 
       cy.get(`[data-cy="lastName"]`).type('Little').should('have.value', 'Little');
+
+      cy.get(`[data-cy="birthTimestamp"]`).type('2021-10-31T16:39').should('have.value', '2021-10-31T16:39');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

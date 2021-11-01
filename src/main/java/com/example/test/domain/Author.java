@@ -1,6 +1,7 @@
 package com.example.test.domain;
 
 import java.io.Serializable;
+import java.time.Instant;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -29,6 +30,9 @@ public class Author implements Serializable {
     @NotNull
     @Column(name = "last_name", nullable = false)
     private String lastName;
+
+    @Column(name = "birth_timestamp")
+    private Instant birthTimestamp;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -71,6 +75,19 @@ public class Author implements Serializable {
         this.lastName = lastName;
     }
 
+    public Instant getBirthTimestamp() {
+        return this.birthTimestamp;
+    }
+
+    public Author birthTimestamp(Instant birthTimestamp) {
+        this.setBirthTimestamp(birthTimestamp);
+        return this;
+    }
+
+    public void setBirthTimestamp(Instant birthTimestamp) {
+        this.birthTimestamp = birthTimestamp;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -97,6 +114,7 @@ public class Author implements Serializable {
             "id=" + getId() +
             ", firstName='" + getFirstName() + "'" +
             ", lastName='" + getLastName() + "'" +
+            ", birthTimestamp='" + getBirthTimestamp() + "'" +
             "}";
     }
 }

@@ -9,6 +9,10 @@
       "fieldName": "lastName",
       "fieldType": "String",
       "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "birthTimestamp",
+      "fieldType": "Instant"
     }
   ],
   "relationships": [],

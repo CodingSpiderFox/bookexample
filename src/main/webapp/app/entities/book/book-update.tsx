@@ -41,6 +41,9 @@ export const BookUpdate = (props: RouteComponentProps<{ id: string }>) => {
   }, [updateSuccess]);
 
   const saveEntity = values => {
+    values.writeStartTimestamp = convertDateTimeToServer(values.writeStartTimestamp);
+    values.publishTimestamp = convertDateTimeToServer(values.publishTimestamp);
+
     const entity = {
       ...bookEntity,
       ...values,
@@ -56,9 +59,14 @@ export const BookUpdate = (props: RouteComponentProps<{ id: string }>) => {
 
   const defaultValues = () =>
     isNew
-      ? {}
+      ? {
+          writeStartTimestamp: displayDefaultDateTime(),
+          publishTimestamp: displayDefaultDateTime(),
+        }
       : {
           ...bookEntity,
+          writeStartTimestamp: convertDateTimeFromServer(bookEntity.writeStartTimestamp),
+          publishTimestamp: convertDateTimeFromServer(bookEntity.publishTimestamp),
           authors: bookEntity?.authors?.map(e => e.id.toString()),
         };
 
@@ -107,6 +115,22 @@ export const BookUpdate = (props: RouteComponentProps<{ id: string }>) => {
                 validate={{
                   required: { value: true, message: translate('entity.validation.required') },
                 }}
+              />
+              <ValidatedField
+                label={translate('constraintissueApp.book.writeStartTimestamp')}
+                id="book-writeStartTimestamp"
+                name="writeStartTimestamp"
+                data-cy="writeStartTimestamp"
+                type="datetime-local"
+                placeholder="YYYY-MM-DD HH:mm"
+              />
+              <ValidatedField
+                label={translate('constraintissueApp.book.publishTimestamp')}
+                id="book-publishTimestamp"
+                name="publishTimestamp"
+                data-cy="publishTimestamp"
+                type="datetime-local"
+                placeholder="YYYY-MM-DD HH:mm"
               />
               <ValidatedField
                 label={translate('constraintissueApp.book.author')}

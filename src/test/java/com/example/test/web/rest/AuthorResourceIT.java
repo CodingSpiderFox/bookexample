@@ -11,6 +11,8 @@ import com.example.test.repository.AuthorRepository;
 import com.example.test.service.criteria.AuthorCriteria;
 import com.example.test.service.dto.AuthorDTO;
 import com.example.test.service.mapper.AuthorMapper;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -37,6 +39,9 @@ class AuthorResourceIT {
 
     private static final String DEFAULT_LAST_NAME = "AAAAAAAAAA";
     private static final String UPDATED_LAST_NAME = "BBBBBBBBBB";
+
+    private static final Instant DEFAULT_BIRTH_TIMESTAMP = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_BIRTH_TIMESTAMP = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
     private static final String ENTITY_API_URL = "/api/authors";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -65,7 +70,7 @@ class AuthorResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Author createEntity(EntityManager em) {
-        Author author = new Author().firstName(DEFAULT_FIRST_NAME).lastName(DEFAULT_LAST_NAME);
+        Author author = new Author().firstName(DEFAULT_FIRST_NAME).lastName(DEFAULT_LAST_NAME).birthTimestamp(DEFAULT_BIRTH_TIMESTAMP);
         return author;
     }
 
@@ -76,7 +81,7 @@ class AuthorResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Author createUpdatedEntity(EntityManager em) {
-        Author author = new Author().firstName(UPDATED_FIRST_NAME).lastName(UPDATED_LAST_NAME);
+        Author author = new Author().firstName(UPDATED_FIRST_NAME).lastName(UPDATED_LAST_NAME).birthTimestamp(UPDATED_BIRTH_TIMESTAMP);
         return author;
     }
 
@@ -101,6 +106,7 @@ class AuthorResourceIT {
         Author testAuthor = authorList.get(authorList.size() - 1);
         assertThat(testAuthor.getFirstName()).isEqualTo(DEFAULT_FIRST_NAME);
         assertThat(testAuthor.getLastName()).isEqualTo(DEFAULT_LAST_NAME);
+        assertThat(testAuthor.getBirthTimestamp()).isEqualTo(DEFAULT_BIRTH_TIMESTAMP);
     }
 
     @Test
@@ -171,7 +177,8 @@ class AuthorResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(author.getId().intValue())))
             .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRST_NAME)))
-            .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME)));
+            .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME)))
+            .andExpect(jsonPath("$.[*].birthTimestamp").value(hasItem(DEFAULT_BIRTH_TIMESTAMP.toString())));
     }
 
     @Test
@@ -187,7 +194,8 @@ class AuthorResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(author.getId().intValue()))
             .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRST_NAME))
-            .andExpect(jsonPath("$.lastName").value(DEFAULT_LAST_NAME));
+            .andExpect(jsonPath("$.lastName").value(DEFAULT_LAST_NAME))
+            .andExpect(jsonPath("$.birthTimestamp").value(DEFAULT_BIRTH_TIMESTAMP.toString()));
     }
 
     @Test
@@ -364,6 +372,58 @@ class AuthorResourceIT {
         defaultAuthorShouldBeFound("lastName.doesNotContain=" + UPDATED_LAST_NAME);
     }
 
+    @Test
+    @Transactional
+    void getAllAuthorsByBirthTimestampIsEqualToSomething() throws Exception {
+        // Initialize the database
+        authorRepository.saveAndFlush(author);
+
+        // Get all the authorList where birthTimestamp equals to DEFAULT_BIRTH_TIMESTAMP
+        defaultAuthorShouldBeFound("birthTimestamp.equals=" + DEFAULT_BIRTH_TIMESTAMP);
+
+        // Get all the authorList where birthTimestamp equals to UPDATED_BIRTH_TIMESTAMP
+        defaultAuthorShouldNotBeFound("birthTimestamp.equals=" + UPDATED_BIRTH_TIMESTAMP);
+    }
+
+    @Test
+    @Transactional
+    void getAllAuthorsByBirthTimestampIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        authorRepository.saveAndFlush(author);
+
+        // Get all the authorList where birthTimestamp not equals to DEFAULT_BIRTH_TIMESTAMP
+        defaultAuthorShouldNotBeFound("birthTimestamp.notEquals=" + DEFAULT_BIRTH_TIMESTAMP);
+
+        // Get all the authorList where birthTimestamp not equals to UPDATED_BIRTH_TIMESTAMP
+        defaultAuthorShouldBeFound("birthTimestamp.notEquals=" + UPDATED_BIRTH_TIMESTAMP);
+    }
+
+    @Test
+    @Transactional
+    void getAllAuthorsByBirthTimestampIsInShouldWork() throws Exception {
+        // Initialize the database
+        authorRepository.saveAndFlush(author);
+
+        // Get all the authorList where birthTimestamp in DEFAULT_BIRTH_TIMESTAMP or UPDATED_BIRTH_TIMESTAMP
+        defaultAuthorShouldBeFound("birthTimestamp.in=" + DEFAULT_BIRTH_TIMESTAMP + "," + UPDATED_BIRTH_TIMESTAMP);
+
+        // Get all the authorList where birthTimestamp equals to UPDATED_BIRTH_TIMESTAMP
+        defaultAuthorShouldNotBeFound("birthTimestamp.in=" + UPDATED_BIRTH_TIMESTAMP);
+    }
+
+    @Test
+    @Transactional
+    void getAllAuthorsByBirthTimestampIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        authorRepository.saveAndFlush(author);
+
+        // Get all the authorList where birthTimestamp is not null
+        defaultAuthorShouldBeFound("birthTimestamp.specified=true");
+
+        // Get all the authorList where birthTimestamp is null
+        defaultAuthorShouldNotBeFound("birthTimestamp.specified=false");
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -374,7 +434,8 @@ class AuthorResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(author.getId().intValue())))
             .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRST_NAME)))
-            .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME)));
+            .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME)))
+            .andExpect(jsonPath("$.[*].birthTimestamp").value(hasItem(DEFAULT_BIRTH_TIMESTAMP.toString())));
 
         // Check, that the count call also returns 1
         restAuthorMockMvc
@@ -422,7 +483,7 @@ class AuthorResourceIT {
         Author updatedAuthor = authorRepository.findById(author.getId()).get();
         // Disconnect from session so that the updates on updatedAuthor are not directly saved in db
         em.detach(updatedAuthor);
-        updatedAuthor.firstName(UPDATED_FIRST_NAME).lastName(UPDATED_LAST_NAME);
+        updatedAuthor.firstName(UPDATED_FIRST_NAME).lastName(UPDATED_LAST_NAME).birthTimestamp(UPDATED_BIRTH_TIMESTAMP);
         AuthorDTO authorDTO = authorMapper.toDto(updatedAuthor);
 
         restAuthorMockMvc
@@ -439,6 +500,7 @@ class AuthorResourceIT {
         Author testAuthor = authorList.get(authorList.size() - 1);
         assertThat(testAuthor.getFirstName()).isEqualTo(UPDATED_FIRST_NAME);
         assertThat(testAuthor.getLastName()).isEqualTo(UPDATED_LAST_NAME);
+        assertThat(testAuthor.getBirthTimestamp()).isEqualTo(UPDATED_BIRTH_TIMESTAMP);
     }
 
     @Test
@@ -534,6 +596,7 @@ class AuthorResourceIT {
         Author testAuthor = authorList.get(authorList.size() - 1);
         assertThat(testAuthor.getFirstName()).isEqualTo(DEFAULT_FIRST_NAME);
         assertThat(testAuthor.getLastName()).isEqualTo(UPDATED_LAST_NAME);
+        assertThat(testAuthor.getBirthTimestamp()).isEqualTo(DEFAULT_BIRTH_TIMESTAMP);
     }
 
     @Test
@@ -548,7 +611,7 @@ class AuthorResourceIT {
         Author partialUpdatedAuthor = new Author();
         partialUpdatedAuthor.setId(author.getId());
 
-        partialUpdatedAuthor.firstName(UPDATED_FIRST_NAME).lastName(UPDATED_LAST_NAME);
+        partialUpdatedAuthor.firstName(UPDATED_FIRST_NAME).lastName(UPDATED_LAST_NAME).birthTimestamp(UPDATED_BIRTH_TIMESTAMP);
 
         restAuthorMockMvc
             .perform(
@@ -564,6 +627,7 @@ class AuthorResourceIT {
         Author testAuthor = authorList.get(authorList.size() - 1);
         assertThat(testAuthor.getFirstName()).isEqualTo(UPDATED_FIRST_NAME);
         assertThat(testAuthor.getLastName()).isEqualTo(UPDATED_LAST_NAME);
+        assertThat(testAuthor.getBirthTimestamp()).isEqualTo(UPDATED_BIRTH_TIMESTAMP);
     }
 
     @Test

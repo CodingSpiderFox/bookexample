@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Col, Row, Table } from 'reactstrap';
-import { Translate, getSortState } from 'react-jhipster';
+import { Translate, TextFormat, getSortState } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { getEntities, reset } from './author.reducer';
@@ -131,6 +131,10 @@ export const Author = (props: RouteComponentProps<{ url: string }>) => {
                   <th className="hand" onClick={sort('lastName')}>
                     <Translate contentKey="constraintissueApp.author.lastName">Last Name</Translate> <FontAwesomeIcon icon="sort" />
                   </th>
+                  <th className="hand" onClick={sort('birthTimestamp')}>
+                    <Translate contentKey="constraintissueApp.author.birthTimestamp">Birth Timestamp</Translate>{' '}
+                    <FontAwesomeIcon icon="sort" />
+                  </th>
                   <th />
                 </tr>
               </thead>
@@ -144,6 +148,9 @@ export const Author = (props: RouteComponentProps<{ url: string }>) => {
                     </td>
                     <td>{author.firstName}</td>
                     <td>{author.lastName}</td>
+                    <td>
+                      {author.birthTimestamp ? <TextFormat type="date" value={author.birthTimestamp} format={APP_DATE_FORMAT} /> : null}
+                    </td>
                     <td className="text-right">
                       <div className="btn-group flex-btn-group-container">
                         <Button tag={Link} to={`${match.url}/${author.id}`} color="info" size="sm" data-cy="entityDetailsButton">
