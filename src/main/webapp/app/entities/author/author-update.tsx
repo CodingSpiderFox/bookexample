@@ -64,8 +64,8 @@ export const AuthorUpdate = (props: RouteComponentProps<{ id: string }>) => {
     <div>
       <Row className="justify-content-center">
         <Col md="8">
-          <h2 id="constraintissueApp.author.home.createOrEditLabel" data-cy="AuthorCreateUpdateHeading">
-            <Translate contentKey="constraintissueApp.author.home.createOrEditLabel">Create or edit a Author</Translate>
+          <h2 id="bookexampleApp.author.home.createOrEditLabel" data-cy="AuthorCreateUpdateHeading">
+            <Translate contentKey="bookexampleApp.author.home.createOrEditLabel">Create or edit a Author</Translate>
           </h2>
         </Col>
       </Row>
@@ -86,7 +86,7 @@ export const AuthorUpdate = (props: RouteComponentProps<{ id: string }>) => {
                 />
               ) : null}
               <ValidatedField
-                label={translate('constraintissueApp.author.firstName')}
+                label={translate('bookexampleApp.author.firstName')}
                 id="author-firstName"
                 name="firstName"
                 data-cy="firstName"
@@ -96,7 +96,7 @@ export const AuthorUpdate = (props: RouteComponentProps<{ id: string }>) => {
                 }}
               />
               <ValidatedField
-                label={translate('constraintissueApp.author.lastName')}
+                label={translate('bookexampleApp.author.lastName')}
                 id="author-lastName"
                 name="lastName"
                 data-cy="lastName"
@@ -106,7 +106,7 @@ export const AuthorUpdate = (props: RouteComponentProps<{ id: string }>) => {
                 }}
               />
               <ValidatedField
-                label={translate('constraintissueApp.author.birthTimestamp')}
+                label={translate('bookexampleApp.author.birthTimestamp')}
                 id="author-birthTimestamp"
                 name="birthTimestamp"
                 data-cy="birthTimestamp"

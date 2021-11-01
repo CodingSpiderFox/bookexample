@@ -20,7 +20,7 @@ export const AuthorDetail = (props: RouteComponentProps<{ id: string }>) => {
     <Row>
       <Col md="8">
         <h2 data-cy="authorDetailsHeading">
-          <Translate contentKey="constraintissueApp.author.detail.title">Author</Translate>
+          <Translate contentKey="bookexampleApp.author.detail.title">Author</Translate>
         </h2>
         <dl className="jh-entity-details">
           <dt>
@@ -31,19 +31,19 @@ export const AuthorDetail = (props: RouteComponentProps<{ id: string }>) => {
           <dd>{authorEntity.id}</dd>
           <dt>
             <span id="firstName">
-              <Translate contentKey="constraintissueApp.author.firstName">First Name</Translate>
+              <Translate contentKey="bookexampleApp.author.firstName">First Name</Translate>
             </span>
           </dt>
           <dd>{authorEntity.firstName}</dd>
           <dt>
             <span id="lastName">
-              <Translate contentKey="constraintissueApp.author.lastName">Last Name</Translate>
+              <Translate contentKey="bookexampleApp.author.lastName">Last Name</Translate>
             </span>
           </dt>
           <dd>{authorEntity.lastName}</dd>
           <dt>
             <span id="birthTimestamp">
-              <Translate contentKey="constraintissueApp.author.birthTimestamp">Birth Timestamp</Translate>
+              <Translate contentKey="bookexampleApp.author.birthTimestamp">Birth Timestamp</Translate>
             </span>
           </dt>
           <dd>

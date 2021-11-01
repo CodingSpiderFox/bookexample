@@ -20,7 +20,7 @@ export const BookDetail = (props: RouteComponentProps<{ id: string }>) => {
     <Row>
       <Col md="8">
         <h2 data-cy="bookDetailsHeading">
-          <Translate contentKey="constraintissueApp.book.detail.title">Book</Translate>
+          <Translate contentKey="bookexampleApp.book.detail.title">Book</Translate>
         </h2>
         <dl className="jh-entity-details">
           <dt>
@@ -31,19 +31,19 @@ export const BookDetail = (props: RouteComponentProps<{ id: string }>) => {
           <dd>{bookEntity.id}</dd>
           <dt>
             <span id="price">
-              <Translate contentKey="constraintissueApp.book.price">Price</Translate>
+              <Translate contentKey="bookexampleApp.book.price">Price</Translate>
             </span>
           </dt>
           <dd>{bookEntity.price}</dd>
           <dt>
             <span id="title">
-              <Translate contentKey="constraintissueApp.book.title">Title</Translate>
+              <Translate contentKey="bookexampleApp.book.title">Title</Translate>
             </span>
           </dt>
           <dd>{bookEntity.title}</dd>
           <dt>
             <span id="writeStartTimestamp">
-              <Translate contentKey="constraintissueApp.book.writeStartTimestamp">Write Start Timestamp</Translate>
+              <Translate contentKey="bookexampleApp.book.writeStartTimestamp">Write Start Timestamp</Translate>
             </span>
           </dt>
           <dd>
@@ -53,14 +53,14 @@ export const BookDetail = (props: RouteComponentProps<{ id: string }>) => {
           </dd>
           <dt>
             <span id="publishTimestamp">
-              <Translate contentKey="constraintissueApp.book.publishTimestamp">Publish Timestamp</Translate>
+              <Translate contentKey="bookexampleApp.book.publishTimestamp">Publish Timestamp</Translate>
             </span>
           </dt>
           <dd>
             {bookEntity.publishTimestamp ? <TextFormat value={bookEntity.publishTimestamp} type="date" format={APP_DATE_FORMAT} /> : null}
           </dd>
           <dt>
-            <Translate contentKey="constraintissueApp.book.author">Author</Translate>
+            <Translate contentKey="bookexampleApp.book.author">Author</Translate>
           </dt>
           <dd>
             {bookEntity.authors

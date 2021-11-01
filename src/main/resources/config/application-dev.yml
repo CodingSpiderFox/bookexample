@@ -32,8 +32,8 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/constraintissue
-    username: constraintissue
+    url: jdbc:postgresql://localhost:5432/bookexample
+    username: bookexample
     password:
     hikari:
       poolName: Hikari

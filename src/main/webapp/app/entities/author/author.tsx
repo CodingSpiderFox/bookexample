@@ -96,16 +96,16 @@ export const Author = (props: RouteComponentProps<{ url: string }>) => {
   return (
     <div>
       <h2 id="author-heading" data-cy="AuthorHeading">
-        <Translate contentKey="constraintissueApp.author.home.title">Authors</Translate>
+        <Translate contentKey="bookexampleApp.author.home.title">Authors</Translate>
         <div className="d-flex justify-content-end">
           <Button className="mr-2" color="info" onClick={handleSyncList} disabled={loading}>
             <FontAwesomeIcon icon="sync" spin={loading} />{' '}
-            <Translate contentKey="constraintissueApp.author.home.refreshListLabel">Refresh List</Translate>
+            <Translate contentKey="bookexampleApp.author.home.refreshListLabel">Refresh List</Translate>
           </Button>
           <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
             <FontAwesomeIcon icon="plus" />
             &nbsp;
-            <Translate contentKey="constraintissueApp.author.home.createLabel">Create new Author</Translate>
+            <Translate contentKey="bookexampleApp.author.home.createLabel">Create new Author</Translate>
           </Link>
         </div>
       </h2>
@@ -123,17 +123,16 @@ export const Author = (props: RouteComponentProps<{ url: string }>) => {
               <thead>
                 <tr>
                   <th className="hand" onClick={sort('id')}>
-                    <Translate contentKey="constraintissueApp.author.id">ID</Translate> <FontAwesomeIcon icon="sort" />
+                    <Translate contentKey="bookexampleApp.author.id">ID</Translate> <FontAwesomeIcon icon="sort" />
                   </th>
                   <th className="hand" onClick={sort('firstName')}>
-                    <Translate contentKey="constraintissueApp.author.firstName">First Name</Translate> <FontAwesomeIcon icon="sort" />
+                    <Translate contentKey="bookexampleApp.author.firstName">First Name</Translate> <FontAwesomeIcon icon="sort" />
                   </th>
                   <th className="hand" onClick={sort('lastName')}>
-                    <Translate contentKey="constraintissueApp.author.lastName">Last Name</Translate> <FontAwesomeIcon icon="sort" />
+                    <Translate contentKey="bookexampleApp.author.lastName">Last Name</Translate> <FontAwesomeIcon icon="sort" />
                   </th>
                   <th className="hand" onClick={sort('birthTimestamp')}>
-                    <Translate contentKey="constraintissueApp.author.birthTimestamp">Birth Timestamp</Translate>{' '}
-                    <FontAwesomeIcon icon="sort" />
+                    <Translate contentKey="bookexampleApp.author.birthTimestamp">Birth Timestamp</Translate> <FontAwesomeIcon icon="sort" />
                   </th>
                   <th />
                 </tr>
@@ -180,7 +179,7 @@ export const Author = (props: RouteComponentProps<{ url: string }>) => {
           ) : (
             !loading && (
               <div className="alert alert-warning">
-                <Translate contentKey="constraintissueApp.author.home.notFound">No Authors found</Translate>
+                <Translate contentKey="bookexampleApp.author.home.notFound">No Authors found</Translate>
               </div>
             )
           )}

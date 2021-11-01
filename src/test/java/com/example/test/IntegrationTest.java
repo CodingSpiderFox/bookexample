@@ -1,6 +1,5 @@
 package com.example.test;
 
-import com.example.test.ConstraintissueApp;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -12,6 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@SpringBootTest(classes = ConstraintissueApp.class)
+@SpringBootTest(classes = BookExampleApp.class)
 public @interface IntegrationTest {
 }

@@ -96,16 +96,16 @@ export const Book = (props: RouteComponentProps<{ url: string }>) => {
   return (
     <div>
       <h2 id="book-heading" data-cy="BookHeading">
-        <Translate contentKey="constraintissueApp.book.home.title">Books</Translate>
+        <Translate contentKey="bookexampleApp.book.home.title">Books</Translate>
         <div className="d-flex justify-content-end">
           <Button className="mr-2" color="info" onClick={handleSyncList} disabled={loading}>
             <FontAwesomeIcon icon="sync" spin={loading} />{' '}
-            <Translate contentKey="constraintissueApp.book.home.refreshListLabel">Refresh List</Translate>
+            <Translate contentKey="bookexampleApp.book.home.refreshListLabel">Refresh List</Translate>
           </Button>
           <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
             <FontAwesomeIcon icon="plus" />
             &nbsp;
-            <Translate contentKey="constraintissueApp.book.home.createLabel">Create new Book</Translate>
+            <Translate contentKey="bookexampleApp.book.home.createLabel">Create new Book</Translate>
           </Link>
         </div>
       </h2>
@@ -123,20 +123,20 @@ export const Book = (props: RouteComponentProps<{ url: string }>) => {
               <thead>
                 <tr>
                   <th className="hand" onClick={sort('id')}>
-                    <Translate contentKey="constraintissueApp.book.id">ID</Translate> <FontAwesomeIcon icon="sort" />
+                    <Translate contentKey="bookexampleApp.book.id">ID</Translate> <FontAwesomeIcon icon="sort" />
                   </th>
                   <th className="hand" onClick={sort('price')}>
-                    <Translate contentKey="constraintissueApp.book.price">Price</Translate> <FontAwesomeIcon icon="sort" />
+                    <Translate contentKey="bookexampleApp.book.price">Price</Translate> <FontAwesomeIcon icon="sort" />
                   </th>
                   <th className="hand" onClick={sort('title')}>
-                    <Translate contentKey="constraintissueApp.book.title">Title</Translate> <FontAwesomeIcon icon="sort" />
+                    <Translate contentKey="bookexampleApp.book.title">Title</Translate> <FontAwesomeIcon icon="sort" />
                   </th>
                   <th className="hand" onClick={sort('writeStartTimestamp')}>
-                    <Translate contentKey="constraintissueApp.book.writeStartTimestamp">Write Start Timestamp</Translate>{' '}
+                    <Translate contentKey="bookexampleApp.book.writeStartTimestamp">Write Start Timestamp</Translate>{' '}
                     <FontAwesomeIcon icon="sort" />
                   </th>
                   <th className="hand" onClick={sort('publishTimestamp')}>
-                    <Translate contentKey="constraintissueApp.book.publishTimestamp">Publish Timestamp</Translate>{' '}
+                    <Translate contentKey="bookexampleApp.book.publishTimestamp">Publish Timestamp</Translate>{' '}
                     <FontAwesomeIcon icon="sort" />
                   </th>
                   <th />
@@ -189,7 +189,7 @@ export const Book = (props: RouteComponentProps<{ url: string }>) => {
           ) : (
             !loading && (
               <div className="alert alert-warning">
-                <Translate contentKey="constraintissueApp.book.home.notFound">No Books found</Translate>
+                <Translate contentKey="bookexampleApp.book.home.notFound">No Books found</Translate>
               </div>
             )
           )}

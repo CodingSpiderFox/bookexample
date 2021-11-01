@@ -6,11 +6,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.example.test</groupId>
-    <artifactId>constraintissue</artifactId>
+    <artifactId>bookexample</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>Constraintissue</name>
-    <description>Description for constraintissue</description>
+    <name>bookexample</name>
+    <description>Description for bookexample</description>
 
     <repositories>
         <!-- jhipster-needle-maven-repository -->
@@ -34,7 +34,7 @@
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <start-class>com.example.test.ConstraintissueApp</start-class>
+        <start-class>com.example.test.bookexampleApp</start-class>
         <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx256m</argLine>
         <m2e.apt.activation>jdt_apt</m2e.apt.activation>
         <run.addResources>false</run.addResources>
@@ -624,7 +624,7 @@
                             </platforms>
                         </from>
                         <to>
-                            <image>constraintissue:latest</image>
+                            <image>bookexample:latest</image>
                         </to>
                         <container>
                             <entrypoint>
@@ -661,9 +661,9 @@
                         <changeLogFile>${project.basedir}/src/main/resources/config/liquibase/master.xml</changeLogFile>
                         <diffChangeLogFile>${project.basedir}/src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
                         <driver>org.postgresql.Driver</driver>
-                        <url>jdbc:postgresql://localhost:5432/constraintissue</url>
+                        <url>jdbc:postgresql://localhost:5432/bookexample</url>
                         <defaultSchemaName></defaultSchemaName>
-                        <username>constraintissue</username>
+                        <username>bookexample</username>
                         <password></password>
                         <referenceUrl>hibernate:spring:com.example.test.domain?dialect=tech.jhipster.domain.util.FixedPostgreSQL10Dialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
                         <verbose>true</verbose>

@@ -39,8 +39,8 @@ export const BookDeleteDialog = (props: RouteComponentProps<{ id: string }>) => 
       <ModalHeader toggle={handleClose} data-cy="bookDeleteDialogHeading">
         <Translate contentKey="entity.delete.title">Confirm delete operation</Translate>
       </ModalHeader>
-      <ModalBody id="constraintissueApp.book.delete.question">
-        <Translate contentKey="constraintissueApp.book.delete.question" interpolate={{ id: bookEntity.id }}>
+      <ModalBody id="bookexampleApp.book.delete.question">
+        <Translate contentKey="bookexampleApp.book.delete.question" interpolate={{ id: bookEntity.id }}>
           Are you sure you want to delete this Book?
         </Translate>
       </ModalBody>

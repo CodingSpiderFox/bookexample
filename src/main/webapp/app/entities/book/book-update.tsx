@@ -74,8 +74,8 @@ export const BookUpdate = (props: RouteComponentProps<{ id: string }>) => {
     <div>
       <Row className="justify-content-center">
         <Col md="8">
-          <h2 id="constraintissueApp.book.home.createOrEditLabel" data-cy="BookCreateUpdateHeading">
-            <Translate contentKey="constraintissueApp.book.home.createOrEditLabel">Create or edit a Book</Translate>
+          <h2 id="bookexampleApp.book.home.createOrEditLabel" data-cy="BookCreateUpdateHeading">
+            <Translate contentKey="bookexampleApp.book.home.createOrEditLabel">Create or edit a Book</Translate>
           </h2>
         </Col>
       </Row>
@@ -96,7 +96,7 @@ export const BookUpdate = (props: RouteComponentProps<{ id: string }>) => {
                 />
               ) : null}
               <ValidatedField
-                label={translate('constraintissueApp.book.price')}
+                label={translate('bookexampleApp.book.price')}
                 id="book-price"
                 name="price"
                 data-cy="price"
@@ -107,7 +107,7 @@ export const BookUpdate = (props: RouteComponentProps<{ id: string }>) => {
                 }}
               />
               <ValidatedField
-                label={translate('constraintissueApp.book.title')}
+                label={translate('bookexampleApp.book.title')}
                 id="book-title"
                 name="title"
                 data-cy="title"
@@ -117,7 +117,7 @@ export const BookUpdate = (props: RouteComponentProps<{ id: string }>) => {
                 }}
               />
               <ValidatedField
-                label={translate('constraintissueApp.book.writeStartTimestamp')}
+                label={translate('bookexampleApp.book.writeStartTimestamp')}
                 id="book-writeStartTimestamp"
                 name="writeStartTimestamp"
                 data-cy="writeStartTimestamp"
@@ -125,7 +125,7 @@ export const BookUpdate = (props: RouteComponentProps<{ id: string }>) => {
                 placeholder="YYYY-MM-DD HH:mm"
               />
               <ValidatedField
-                label={translate('constraintissueApp.book.publishTimestamp')}
+                label={translate('bookexampleApp.book.publishTimestamp')}
                 id="book-publishTimestamp"
                 name="publishTimestamp"
                 data-cy="publishTimestamp"
@@ -133,7 +133,7 @@ export const BookUpdate = (props: RouteComponentProps<{ id: string }>) => {
                 placeholder="YYYY-MM-DD HH:mm"
               />
               <ValidatedField
-                label={translate('constraintissueApp.book.author')}
+                label={translate('bookexampleApp.book.author')}
                 id="book-author"
                 data-cy="author"
                 type="select"

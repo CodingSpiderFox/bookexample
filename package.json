@@ -1,8 +1,8 @@
 {
-  "name": "constraintissue",
+  "name": "bookexample",
   "version": "0.0.1-SNAPSHOT",
   "private": true,
-  "description": "Description for constraintissue",
+  "description": "Description for bookexample",
   "license": "UNLICENSED",
   "scripts": {
     "app:start": "./mvnw",

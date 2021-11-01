@@ -94,7 +94,7 @@ module.exports = async options =>
       ),
       new webpack.HotModuleReplacementPlugin(),
       new WebpackNotifierPlugin({
-        title: 'Constraintissue',
+        title: 'bookexample',
         contentImage: path.join(__dirname, 'logo-jhipster.png'),
       }),
     ].filter(Boolean),

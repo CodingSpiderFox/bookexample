@@ -20,18 +20,18 @@ import tech.jhipster.config.JHipsterConstants;
 
 @SpringBootApplication
 @EnableConfigurationProperties({ LiquibaseProperties.class, ApplicationProperties.class })
-public class ConstraintissueApp {
+public class BookExampleApp {
 
-    private static final Logger log = LoggerFactory.getLogger(ConstraintissueApp.class);
+    private static final Logger log = LoggerFactory.getLogger(BookExampleApp.class);
 
     private final Environment env;
 
-    public ConstraintissueApp(Environment env) {
+    public BookExampleApp(Environment env) {
         this.env = env;
     }
 
     /**
-     * Initializes constraintissue.
+     * Initializes bookexample.
      * <p>
      * Spring profiles can be configured with a program argument --spring.profiles.active=your-active-profile
      * <p>
@@ -64,7 +64,7 @@ public class ConstraintissueApp {
      * @param args the command line arguments.
      */
     public static void main(String[] args) {
-        SpringApplication app = new SpringApplication(ConstraintissueApp.class);
+        SpringApplication app = new SpringApplication(BookExampleApp.class);
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
         logApplicationStartup(env);
