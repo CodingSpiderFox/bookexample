@@ -43,7 +43,7 @@
     "clientThemeVariant": "",
     "languages": ["en"],
     "enableGradleEnterprise": false,
-    "lastLiquibaseTimestamp": 1635768895000,
-    "entities": ["Book"]
+    "lastLiquibaseTimestamp": 1635777572000,
+    "entities": ["Book", "Author"]
   }
 }
